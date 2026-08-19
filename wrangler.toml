@@ -5,4 +5,4 @@ pages_build_output_dir = "."
 [[d1_databases]]
 binding = "DB"
 database_name = "osmos-questionarios"
-database_id = "9105006f-f799-49bf-98ee-28527d166cf0"
+database_id = "6bad8a35-3b38-4c18-a01c-209d50e10d60"
