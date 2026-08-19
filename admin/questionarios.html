@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel administrativo | OSMOS</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">OSMOS</span>
+    <h1>Painel administrativo</h1>
+  </div>
+  <div class="toolbar">
+    <button type="button" class="btn btn-ghost btn-sm" id="refreshBtn">Atualizar</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="logoutBtn">Sair</button>
+  </div>
+</header>
+
+<nav class="tabs" id="adminTabs">
+  <button type="button" class="tab-btn active" data-tab="questionarios">Questionários</button>
+  <button type="button" class="tab-btn" data-tab="raiox">Diagnóstico da Água</button>
+  <button type="button" class="tab-btn" data-tab="leads">Cadastros do Site</button>
+</nav>
+
+<main class="page">
+
+  <!-- ===== Aba: Questionários ===== -->
+  <section class="tab-panel" data-tab-panel="questionarios">
+
+    <!-- KPIs -->
+    <section class="kpi-grid" id="kpiGrid">
+      <div class="kpi"><div class="kpi-lbl">Total de respostas</div><div class="kpi-val" data-kpi="total">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Hoje</div><div class="kpi-val" data-kpi="hoje">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Esta semana</div><div class="kpi-val" data-kpi="semana">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Este mês</div><div class="kpi-val" data-kpi="mes">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Tempo médio</div><div class="kpi-val small" data-kpi="tempoMedio">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Perfil predominante</div><div class="kpi-val small" data-kpi="perfil">—</div></div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Filtros</h2>
+        <button type="button" class="btn btn-ghost btn-sm" id="toggleFilters">Recolher</button>
+      </div>
+      <div class="panel-body" id="filtersBody">
+        <form id="filtersForm">
+          <div class="filters-grid">
+            <div class="field">
+              <label for="fDateFrom">De</label>
+              <input type="date" id="fDateFrom">
+            </div>
+            <div class="field">
+              <label for="fDateTo">Até</label>
+              <input type="date" id="fDateTo">
+            </div>
+            <div class="field">
+              <label for="fPerfil">Perfil</label>
+              <select id="fPerfil">
+                <option value="">Todos</option>
+                <option value="Perfil Inconsciente">Perfil Inconsciente</option>
+                <option value="Perfil Consciente">Perfil Consciente</option>
+                <option value="Perfil Investigador">Perfil Investigador</option>
+                <option value="Perfil Transformador">Perfil Transformador</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="fPageSize">Registros por página</label>
+              <select id="fPageSize">
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
+          <div class="filters-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Aplicar filtros</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="clearFiltersBtn">Limpar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Tabela -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2 id="resultCount">Respostas</h2>
+        <div class="toolbar">
+          <button type="button" class="btn btn-ghost btn-sm" id="exportCsvBtn">Exportar CSV</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="exportXlsxBtn">Exportar Excel</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="exportJsonBtn">Exportar JSON</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th data-sort="id">ID</th>
+              <th data-sort="created_at">Data</th>
+              <th>Horário</th>
+              <th data-sort="perfil">Perfil</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="emptyState" hidden>Nenhuma resposta encontrada para os filtros aplicados.</div>
+      <div class="loading-state" id="loadingState">Carregando...</div>
+      <div class="pagination">
+        <span class="muted" id="pageInfo"></span>
+        <div class="pages">
+          <button type="button" class="btn btn-ghost btn-sm" id="prevPageBtn">‹ Anterior</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="nextPageBtn">Próxima ›</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- ===== Aba: Diagnóstico da Água (Raio-X da Água) ===== -->
+  <section class="tab-panel" data-tab-panel="raiox" hidden>
+
+    <!-- KPIs -->
+    <section class="kpi-grid" id="raioxKpiGrid">
+      <div class="kpi"><div class="kpi-lbl">Total de respostas</div><div class="kpi-val" data-kpi="total">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Hoje</div><div class="kpi-val" data-kpi="hoje">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Esta semana</div><div class="kpi-val" data-kpi="semana">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Este mês</div><div class="kpi-val" data-kpi="mes">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Score médio</div><div class="kpi-val" data-kpi="scoreMedio">—</div></div>
+      <div class="kpi"><div class="kpi-lbl">Críticos</div><div class="kpi-val" data-kpi="criticos">—</div></div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Filtros</h2>
+        <button type="button" class="btn btn-ghost btn-sm" id="raioxToggleFilters">Recolher</button>
+      </div>
+      <div class="panel-body" id="raioxFiltersBody">
+        <form id="raioxFiltersForm">
+          <div class="filters-grid">
+            <div class="field">
+              <label for="rDateFrom">De</label>
+              <input type="date" id="rDateFrom">
+            </div>
+            <div class="field">
+              <label for="rDateTo">Até</label>
+              <input type="date" id="rDateTo">
+            </div>
+            <div class="field">
+              <label for="rCidade">Cidade</label>
+              <input type="text" id="rCidade" placeholder="Cidade">
+            </div>
+            <div class="field">
+              <label for="rEstado">Estado</label>
+              <input type="text" id="rEstado" placeholder="UF">
+            </div>
+            <div class="field">
+              <label for="rOrigemAgua">Origem da água</label>
+              <select id="rOrigemAgua">
+                <option value="">Todas</option>
+                <option value="Rede pública (Saneamento)">Rede pública (Saneamento)</option>
+                <option value="Poço Artesiano">Poço Artesiano</option>
+                <option value="Poço Semi-artesiano">Poço Semi-artesiano</option>
+                <option value="Mina / Nascente">Mina / Nascente</option>
+                <option value="Caminhão Pipa">Caminhão Pipa</option>
+                <option value="Não tenho certeza">Não tenho certeza</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rQtdMoradores">Quantidade de moradores</label>
+              <select id="rQtdMoradores">
+                <option value="">Todas</option>
+                <option value="1 a 2 pessoas">1 a 2 pessoas</option>
+                <option value="3 a 4 pessoas">3 a 4 pessoas</option>
+                <option value="5 a 6 pessoas">5 a 6 pessoas</option>
+                <option value="7 ou mais">7 ou mais</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rTipoImovel">Tipo de imóvel</label>
+              <select id="rTipoImovel">
+                <option value="">Todos</option>
+                <option value="Casa">Casa</option>
+                <option value="Apartamento">Apartamento</option>
+                <option value="Condomínio Horizontal">Condomínio Horizontal</option>
+                <option value="Condomínio Vertical">Condomínio Vertical</option>
+                <option value="Chácara / Fazenda">Chácara / Fazenda</option>
+                <option value="Empresa / Comércio">Empresa / Comércio</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rPageSize">Registros por página</label>
+              <select id="rPageSize">
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
+          <div class="filters-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Aplicar filtros</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="raioxClearFiltersBtn">Limpar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Tabela -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2 id="raioxResultCount">Respostas</h2>
+        <div class="toolbar">
+          <button type="button" class="btn btn-ghost btn-sm" id="raioxExportCsvBtn">Exportar CSV</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="raioxExportXlsxBtn">Exportar Excel</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="raioxExportJsonBtn">Exportar JSON</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th data-sort="id">ID</th>
+              <th data-sort="created_at">Data</th>
+              <th data-sort="nome">Nome</th>
+              <th>WhatsApp</th>
+              <th data-sort="cidade">Cidade</th>
+              <th data-sort="estado">Estado</th>
+              <th data-sort="classificacao">Classificação</th>
+              <th data-sort="score">Score</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="raioxTableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="raioxEmptyState" hidden>Nenhuma resposta encontrada para os filtros aplicados.</div>
+      <div class="loading-state" id="raioxLoadingState">Carregando...</div>
+      <div class="pagination">
+        <span class="muted" id="raioxPageInfo"></span>
+        <div class="pages">
+          <button type="button" class="btn btn-ghost btn-sm" id="raioxPrevPageBtn">‹ Anterior</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="raioxNextPageBtn">Próxima ›</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- ===== Aba: Cadastros do Site ===== -->
+  <section class="tab-panel" data-tab-panel="leads" hidden>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Filtros</h2>
+      </div>
+      <div class="panel-body">
+        <form id="leadsFiltersForm">
+          <div class="filters-grid">
+            <div class="field">
+              <label for="lSearch">Buscar (nome, WhatsApp ou e-mail)</label>
+              <input type="text" id="lSearch" placeholder="Buscar...">
+            </div>
+            <div class="field">
+              <label for="lPageSize">Registros por página</label>
+              <select id="lPageSize">
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
+          <div class="filters-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Aplicar filtros</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="leadsClearFiltersBtn">Limpar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2 id="leadsResultCount">Cadastros</h2>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th data-sort="id">ID</th>
+              <th data-sort="created_at">Data</th>
+              <th>Horário</th>
+              <th>Nome</th>
+              <th>WhatsApp</th>
+              <th>E-mail</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="leadsEmptyState" hidden>Nenhum cadastro encontrado.</div>
+      <div class="loading-state" id="leadsLoadingState">Carregando...</div>
+      <div class="pagination">
+        <span class="muted" id="leadsPageInfo"></span>
+        <div class="pages">
+          <button type="button" class="btn btn-ghost btn-sm" id="leadsPrevPageBtn">‹ Anterior</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="leadsNextPageBtn">Próxima ›</button>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+</main>
+
+<!-- Modal de visualização -->
+<div class="modal-backdrop" id="viewModal" hidden>
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Detalhes da resposta</h2>
+      <button type="button" class="btn btn-ghost btn-sm" id="closeModalBtn">Fechar</button>
+    </div>
+    <div class="modal-body" id="viewModalBody"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/admin-raiox.js"></script>
+<script src="js/admin-leads.js"></script>
+</body>
+</html>

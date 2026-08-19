@@ -1,0 +1,46 @@
+/* ============================================
+   OSMOS — Raio-X da Água (raio-x-agua.html)
+   Reaproveita css/quiz.css; aqui só o que é específico:
+   opções de múltipla escolha (checkbox) e a tela de captura de lead.
+   ============================================ */
+
+.quiz-lead[hidden] { display: none; }
+
+.quiz-option-checkbox {
+  flex: none; width: 24px; height: 24px; border-radius: 6px;
+  border: 1.5px solid var(--silver-soft);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+.quiz-option-checkbox svg { width: 14px; height: 14px; opacity: 0; transform: scale(0.6); transition: opacity var(--dur-fast), transform var(--dur-fast); }
+.quiz-option.selected .quiz-option-checkbox { border-color: var(--blue-accent); background: var(--blue-accent); }
+.quiz-option.selected .quiz-option-checkbox svg { opacity: 1; transform: scale(1); }
+
+.quiz-nav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+
+.quiz-lead {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: var(--section-pad) 0;
+  background: var(--off-white);
+}
+.quiz-lead-content { max-width: 480px; margin: 0 auto; }
+.quiz-lead-content h2 {
+  font-family: var(--font-display); font-weight: 600; color: var(--navy-950);
+  font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.3; margin: 0.75rem 0 1rem;
+}
+.quiz-lead-desc { color: var(--ink-soft); margin-bottom: 2rem; }
+
+.quiz-lead-form { display: flex; flex-direction: column; gap: 1.1rem; text-align: left; }
+.quiz-lead-form .field { display: flex; flex-direction: column; gap: 0.4rem; }
+.quiz-lead-form label { font-size: 0.85rem; font-weight: 600; color: var(--ink); }
+.quiz-lead-form input {
+  padding: 0.9rem 1.1rem; border-radius: 12px; border: 1.5px solid var(--silver-soft);
+  background: var(--white); color: var(--ink); font-size: 0.98rem; font-family: var(--font-body);
+  transition: border-color var(--dur-fast);
+}
+.quiz-lead-form input:focus { outline: none; border-color: var(--blue-accent); }
+.quiz-lead-form .btn { margin-top: 0.6rem; }
+
+@media (max-width: 640px) {
+  .quiz-lead-content { max-width: 100%; }
+}

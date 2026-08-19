@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raio-X da Água | OSMOS</title>
+<meta name="description" content="Responda o Raio-X da Água e descubra os riscos e necessidades da água consumida na sua casa. Diagnóstico técnico gratuito OSMOS.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://www.osmos.com.br/raio-x-agua.html">
+
+<link rel="icon" href="assets/img/osmos-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/quiz.css">
+<link rel="stylesheet" href="css/raiox-agua.css">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo" aria-label="OSMOS - Página inicial">
+      <img src="assets/img/osmos-logo.png" alt="OSMOS" class="logo-img" width="624" height="280">
+    </a>
+
+    <div class="header-actions">
+      <a href="index.html" class="btn btn-ghost">Voltar ao site</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- INTRO -->
+  <section class="quiz-hero" id="quizIntro">
+    <div class="container quiz-hero-content">
+      <p class="eyebrow fade-up">Raio-X da Água</p>
+      <h1 class="fade-up delay-1">Descubra os riscos e necessidades reais da água que você consome.</h1>
+      <p class="hero-subtitle quiz-hero-subtitle fade-up delay-2">Responda algumas perguntas técnicas sobre a água da sua casa e receba uma avaliação personalizada para proteger a saúde da sua família.</p>
+      <div class="quiz-hero-meta fade-up delay-3">
+        <span>◈ 14 perguntas</span>
+        <span>◈ Cerca de 3 minutos</span>
+        <span>◈ Avaliação gratuita</span>
+      </div>
+      <div class="hero-actions fade-up delay-3">
+        <button type="button" class="btn btn-primary" id="startQuiz">Iniciar Raio-X da Água</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="quiz-app" id="quizApp" hidden>
+    <div class="container quiz-app-content">
+      <div class="quiz-progress">
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+        <span class="quiz-progress-label" id="quizProgressLabel"></span>
+      </div>
+
+      <div class="quiz-card" id="quizCard" role="group" aria-live="polite">
+        <h2 class="quiz-question" id="quizQuestion"></h2>
+        <div class="quiz-options" id="quizOptions"></div>
+      </div>
+
+      <div class="quiz-nav">
+        <button type="button" class="btn btn-ghost" id="quizBack" disabled>Voltar</button>
+        <button type="button" class="btn btn-primary" id="quizContinue" hidden>Continuar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPTURA DE LEAD -->
+  <section class="quiz-lead" id="quizLead" hidden>
+    <div class="container quiz-lead-content">
+      <p class="eyebrow">Última etapa</p>
+      <h2>Para onde enviamos sua avaliação?</h2>
+      <p class="quiz-lead-desc">Preencha seus dados para nossa equipe entrar em contato com a recomendação ideal para a água da sua casa.</p>
+
+      <form id="quizLeadForm" class="quiz-lead-form">
+        <div class="field">
+          <label for="leadNome">Nome</label>
+          <input type="text" id="leadNome" name="nome" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="leadWhatsapp">WhatsApp</label>
+          <input type="tel" id="leadWhatsapp" name="whatsapp" required autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="leadCidade">Cidade</label>
+          <input type="text" id="leadCidade" name="cidade" autocomplete="address-level2">
+        </div>
+        <div class="field">
+          <label for="leadEstado">Estado</label>
+          <input type="text" id="leadEstado" name="estado" autocomplete="address-level1">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="leadSubmitBtn">Receber minha recomendação</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- RESULTADO -->
+  <section class="quiz-result" id="quizResult" hidden>
+    <div class="container quiz-result-content">
+      <span class="drop-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none"><path d="M20 4C20 4 8 18 8 27a12 12 0 0024 0C32 18 20 4 20 4z" stroke="currentColor" stroke-width="1"/></svg>
+      </span>
+      <p class="eyebrow">Obrigado!</p>
+      <h2>Agora já entendemos melhor as características da água utilizada na sua residência.</h2>
+      <p class="quiz-result-desc">Com essas informações, nossa equipe poderá indicar a solução ideal para proteger sua saúde e aumentar a qualidade da água consumida.</p>
+      <div class="quiz-result-actions">
+        <a href="index.html#contato" class="btn btn-primary">Receber minha recomendação</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="assets/img/osmos-logo.png" alt="OSMOS" class="logo-img footer-logo" width="624" height="280">
+      <p>Especialista em soluções de filtragem e purificação de água por Osmose Reversa.</p>
+    </div>
+
+    <nav class="footer-col" aria-label="Institucional">
+      <h4>Institucional</h4>
+      <ul>
+        <li><a href="index.html#hero">Sobre</a></li>
+        <li><a href="index.html#beneficios">Produtos</a></li>
+        <li><a href="index.html#tecnologia">Tecnologia</a></li>
+        <li><a href="index.html#garantias">Assistência Técnica</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="index.html#contato">Fale Conosco</a></li>
+        <li><a href="https://wa.me/5500000000000" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://instagram.com/osmos" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://linkedin.com/company/osmos" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Política de Privacidade</a></li>
+        <li><a href="#">Termos de Uso</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>&copy; <span id="year"></span> OSMOS. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script src="js/raiox-agua.js"></script>
+</body>
+</html>

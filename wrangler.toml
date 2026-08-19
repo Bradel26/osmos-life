@@ -1,0 +1,8 @@
+name = "osmos-landing"
+compatibility_date = "2026-01-01"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "osmos-questionarios"
+database_id = "9105006f-f799-49bf-98ee-28527d166cf0"

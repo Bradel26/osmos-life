@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico Inteligente | OSMOS</title>
+<meta name="description" content="Descubra em 2 minutos o seu perfil de consumo e cuidado com a saúde e a água. Diagnóstico gratuito e personalizado OSMOS.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://www.osmos.com.br/quiz.html">
+
+<link rel="icon" href="assets/img/osmos-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo" aria-label="OSMOS - Página inicial">
+      <img src="assets/img/osmos-logo.png" alt="OSMOS" class="logo-img" width="624" height="280">
+    </a>
+
+    <div class="header-actions">
+      <a href="index.html" class="btn btn-ghost">Voltar ao site</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- INTRO -->
+  <section class="quiz-hero" id="quizIntro">
+    <div class="container quiz-hero-content">
+      <p class="eyebrow fade-up">Diagnóstico inteligente</p>
+      <h1 class="fade-up delay-1">Descubra em que estágio você está com a sua saúde e a água que consome.</h1>
+      <p class="hero-subtitle quiz-hero-subtitle fade-up delay-2">Responda 20 perguntas rápidas e receba um diagnóstico personalizado sobre seus hábitos de consumo, cuidado com a saúde e prontidão para investir em qualidade de vida.</p>
+      <div class="quiz-hero-meta fade-up delay-3">
+        <span>◈ 20 perguntas</span>
+        <span>◈ Cerca de 2 minutos</span>
+        <span>◈ Resultado imediato</span>
+      </div>
+      <div class="hero-actions fade-up delay-3">
+        <button type="button" class="btn btn-primary" id="startQuiz">Iniciar Diagnóstico</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="quiz-app" id="quizApp" hidden>
+    <div class="container quiz-app-content">
+      <div class="quiz-progress">
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+        <span class="quiz-progress-label" id="quizProgressLabel">Pergunta 1 de 20</span>
+      </div>
+
+      <div class="quiz-card" id="quizCard" role="group" aria-live="polite">
+        <h2 class="quiz-question" id="quizQuestion"></h2>
+        <div class="quiz-options" id="quizOptions"></div>
+      </div>
+
+      <div class="quiz-nav">
+        <button type="button" class="btn btn-ghost" id="quizBack" disabled>Voltar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADO -->
+  <section class="quiz-result" id="quizResult" hidden>
+    <div class="container quiz-result-content">
+      <span class="drop-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none"><path d="M20 4C20 4 8 18 8 27a12 12 0 0024 0C32 18 20 4 20 4z" stroke="currentColor" stroke-width="1"/></svg>
+      </span>
+      <p class="eyebrow" id="resultEyebrow">Seu perfil</p>
+      <h2 id="resultTitle"></h2>
+      <p class="quiz-result-desc" id="resultDescription"></p>
+      <div class="quiz-result-actions">
+        <a href="#" class="btn btn-primary" id="resultCta"></a>
+        <button type="button" class="btn btn-ghost" id="quizRestart">Refazer diagnóstico</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="assets/img/osmos-logo.png" alt="OSMOS" class="logo-img footer-logo" width="624" height="280">
+      <p>Especialista em soluções de filtragem e purificação de água por Osmose Reversa.</p>
+    </div>
+
+    <nav class="footer-col" aria-label="Institucional">
+      <h4>Institucional</h4>
+      <ul>
+        <li><a href="index.html#hero">Sobre</a></li>
+        <li><a href="index.html#beneficios">Produtos</a></li>
+        <li><a href="index.html#tecnologia">Tecnologia</a></li>
+        <li><a href="index.html#garantias">Assistência Técnica</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="index.html#contato">Fale Conosco</a></li>
+        <li><a href="https://wa.me/5500000000000" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://instagram.com/osmos" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://linkedin.com/company/osmos" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Política de Privacidade</a></li>
+        <li><a href="#">Termos de Uso</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>&copy; <span id="year"></span> OSMOS. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script src="js/quiz.js"></script>
+</body>
+</html>

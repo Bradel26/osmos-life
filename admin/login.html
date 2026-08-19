@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login administrativo | OSMOS</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="login-shell">
+  <div class="login-card">
+    <h1>Área administrativa</h1>
+    <p class="sub">OSMOS · Questionários de diagnóstico</p>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" autocomplete="current-password" required autofocus>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Entrar</button>
+      <p class="error-msg" id="loginError"></p>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var form = document.getElementById('loginForm');
+  var errorEl = document.getElementById('loginError');
+  var btn = document.getElementById('loginBtn');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Entrando…';
+
+    fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha: document.getElementById('senha').value })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('unauthorized');
+        window.location.href = 'questionarios.html';
+      })
+      .catch(function () {
+        errorEl.textContent = 'Senha incorreta. Tente novamente.';
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      });
+  });
+})();
+</script>
+
+</body>
+</html>
