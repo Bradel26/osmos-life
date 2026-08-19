@@ -6,3 +6,5 @@ pages_build_output_dir = "."
 binding = "DB"
 database_name = "osmos-questionarios"
 database_id = "6bad8a35-3b38-4c18-a01c-209d50e10d60"
+
+# redeploy
