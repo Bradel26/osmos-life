@@ -2,6 +2,22 @@
    OSMOS — Blog
    ============================================ */
 
+/* As páginas do blog têm hero CLARO no topo, ao contrário da home (hero escuro).
+   Por isso o header, mesmo antes de rolar, precisa usar o tema claro
+   (texto escuro + logo normal), senão o texto branco some sobre o fundo claro.
+   blog.css só é carregado no blog, então isto não afeta a home. */
+.site-header:not(.scrolled) {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 1px 0 rgba(15, 33, 56, 0.06);
+}
+.site-header:not(.scrolled) .logo-text,
+.site-header:not(.scrolled) .btn-ghost { color: var(--navy-950); }
+.site-header:not(.scrolled) .main-nav a { color: var(--navy-900); }
+.site-header:not(.scrolled) .main-nav a.active { color: var(--blue-accent); }
+.site-header:not(.scrolled) .nav-toggle { color: var(--navy-950); }
+.site-header:not(.scrolled) .logo-img { filter: none; }
+
 /* Hero da listagem / cabeçalho de página, com espaço para o header fixo */
 .blog-hero {
   padding: calc(var(--header-h) + clamp(2.5rem, 6vw, 4.5rem)) 0 clamp(2rem, 4vw, 3rem);
