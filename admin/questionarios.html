@@ -27,6 +27,7 @@
   <button type="button" class="tab-btn active" data-tab="questionarios">Questionários</button>
   <button type="button" class="tab-btn" data-tab="raiox">Diagnóstico da Água</button>
   <button type="button" class="tab-btn" data-tab="leads">Cadastros do Site</button>
+  <button type="button" class="tab-btn" data-tab="blog">Blog</button>
 </nav>
 
 <main class="page">
@@ -321,6 +322,115 @@
 
   </section>
 
+  <!-- ===== Aba: Blog ===== -->
+  <section class="tab-panel" data-tab-panel="blog" hidden>
+
+    <!-- Lista de posts -->
+    <section class="panel" id="blogListPanel">
+      <div class="panel-header">
+        <h2 id="blogResultCount">Posts</h2>
+        <div class="toolbar">
+          <label class="field field-inline">
+            <span class="sr-only">Filtrar por status</span>
+            <select id="blogStatusFilter">
+              <option value="">Todos os status</option>
+              <option value="publicado">Publicados</option>
+              <option value="rascunho">Rascunhos</option>
+            </select>
+          </label>
+          <button type="button" class="btn btn-primary btn-sm" id="blogNewBtn">+ Novo post</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th data-sort="id">ID</th>
+              <th data-sort="titulo">Título</th>
+              <th data-sort="status">Status</th>
+              <th data-sort="published_at">Publicado em</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="blogTableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="blogEmptyState" hidden>Nenhum post ainda. Clique em “Novo post” para começar.</div>
+      <div class="loading-state" id="blogLoadingState">Carregando...</div>
+      <div class="pagination">
+        <span class="muted" id="blogPageInfo"></span>
+        <div class="pages">
+          <button type="button" class="btn btn-ghost btn-sm" id="blogPrevPageBtn">‹ Anterior</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="blogNextPageBtn">Próxima ›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editor de post -->
+    <section class="panel" id="blogEditorPanel" hidden>
+      <div class="panel-header">
+        <h2 id="blogEditorTitle">Novo post</h2>
+        <div class="toolbar">
+          <a class="btn btn-ghost btn-sm" id="blogPreviewLink" href="#" target="_blank" rel="noopener" hidden>Ver no site ↗</a>
+          <button type="button" class="btn btn-ghost btn-sm" id="blogCancelBtn">Cancelar</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <form id="blogEditorForm">
+          <input type="hidden" id="bId">
+          <div class="field">
+            <label for="bTitulo">Título *</label>
+            <input type="text" id="bTitulo" maxlength="160" required placeholder="Ex.: 5 sinais de que a água da sua casa precisa de atenção">
+          </div>
+          <div class="field">
+            <label for="bSlug">Endereço (slug)</label>
+            <input type="text" id="bSlug" maxlength="80" placeholder="gerado automaticamente a partir do título">
+            <span class="field-hint">Deixe em branco para gerar do título. Ex.: <code>/blog/agua-da-sua-casa</code></span>
+          </div>
+          <div class="field">
+            <label for="bResumo">Resumo (aparece na listagem)</label>
+            <textarea id="bResumo" rows="2" maxlength="300" placeholder="Uma ou duas frases que resumem o artigo."></textarea>
+          </div>
+          <div class="field">
+            <label for="bConteudo">Conteúdo * <span class="field-hint">(aceita HTML: &lt;p&gt;, &lt;h2&gt;, &lt;ul&gt;/&lt;li&gt;, &lt;strong&gt;, &lt;a&gt;, &lt;img&gt;)</span></label>
+            <textarea id="bConteudo" rows="16" required placeholder="<p>Escreva aqui o corpo do artigo...</p>"></textarea>
+          </div>
+          <div class="filters-grid">
+            <div class="field">
+              <label for="bImagemUrl">URL da imagem de capa</label>
+              <input type="url" id="bImagemUrl" placeholder="https://...">
+            </div>
+            <div class="field">
+              <label for="bImagemAlt">Descrição da imagem (alt)</label>
+              <input type="text" id="bImagemAlt" maxlength="180" placeholder="Descreva a imagem para acessibilidade/SEO">
+            </div>
+            <div class="field">
+              <label for="bAutor">Autor</label>
+              <input type="text" id="bAutor" maxlength="120" placeholder="Ex.: Equipe OSMOS">
+            </div>
+            <div class="field">
+              <label for="bStatus">Status</label>
+              <select id="bStatus">
+                <option value="rascunho">Rascunho (não aparece no site)</option>
+                <option value="publicado">Publicado (visível no site)</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="bMetaDescription">Meta description (SEO)</label>
+            <textarea id="bMetaDescription" rows="2" maxlength="200" placeholder="Descrição para o Google (até ~160 caracteres)."></textarea>
+          </div>
+          <div class="filters-actions">
+            <button type="submit" class="btn btn-primary btn-sm" id="blogSaveBtn">Salvar</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="blogCancelBtn2">Cancelar</button>
+            <span class="muted" id="blogSaveStatus"></span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </section>
+
 </main>
 
 <!-- Modal de visualização -->
@@ -338,5 +448,6 @@
 <script src="js/admin.js"></script>
 <script src="js/admin-raiox.js"></script>
 <script src="js/admin-leads.js"></script>
+<script src="js/admin-blog.js"></script>
 </body>
 </html>

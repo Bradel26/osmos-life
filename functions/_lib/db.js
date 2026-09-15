@@ -10,7 +10,10 @@ const SCHEMA_STATEMENTS = [
   "CREATE INDEX IF NOT EXISTS idx_raiox_created_at ON raiox_agua_respostas(created_at)",
   "CREATE INDEX IF NOT EXISTS idx_raiox_cidade ON raiox_agua_respostas(cidade)",
   "CREATE INDEX IF NOT EXISTS idx_raiox_estado ON raiox_agua_respostas(estado)",
-  "CREATE INDEX IF NOT EXISTS idx_raiox_classificacao ON raiox_agua_respostas(classificacao)"
+  "CREATE INDEX IF NOT EXISTS idx_raiox_classificacao ON raiox_agua_respostas(classificacao)",
+  "CREATE TABLE IF NOT EXISTS blog_posts (id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT NOT NULL UNIQUE, titulo TEXT NOT NULL, resumo TEXT, conteudo TEXT NOT NULL, imagem_url TEXT, imagem_alt TEXT, autor TEXT, status TEXT NOT NULL DEFAULT 'rascunho', meta_description TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT, published_at TEXT)",
+  "CREATE INDEX IF NOT EXISTS idx_blog_status ON blog_posts(status)",
+  "CREATE INDEX IF NOT EXISTS idx_blog_published_at ON blog_posts(published_at)"
 ];
 
 let schemaReady = false;
