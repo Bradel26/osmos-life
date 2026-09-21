@@ -1,4 +1,4 @@
-import { ensureSchema } from '../../../_lib/db.js';
+import { ensureBlogSchema } from '../../../_lib/db.js';
 import { requireAdmin } from '../../../_lib/session.js';
 import { buildSearchFilter, buildEqualsFilter, combineFilters, buildOrder, buildPagination } from '../../../_lib/query.js';
 import { slugify } from '../../../_lib/blog-render.js';
@@ -28,7 +28,7 @@ export async function onRequestGet({ request, env }) {
   const authError = await requireAdmin(request, env);
   if (authError) return authError;
 
-  await ensureSchema(env.DB);
+  await ensureBlogSchema(env.BLOG_DB);
   const url = new URL(request.url);
   const { whereSql, params } = combineFilters(
     buildSearchFilter(url.searchParams, SEARCH_COLUMNS),
@@ -37,8 +37,8 @@ export async function onRequestGet({ request, env }) {
   const orderSql = buildOrder(url.searchParams, SORTABLE_COLUMNS, 'created_at');
   const { page, pageSize, limit, offset } = buildPagination(url.searchParams);
 
-  const countStmt = env.DB.prepare(`SELECT COUNT(*) AS total FROM blog_posts ${whereSql}`).bind(...params);
-  const listStmt = env.DB.prepare(
+  const countStmt = env.BLOG_DB.prepare(`SELECT COUNT(*) AS total FROM blog_posts ${whereSql}`).bind(...params);
+  const listStmt = env.BLOG_DB.prepare(
     `SELECT id, slug, titulo, resumo, imagem_url, autor, status, created_at, updated_at, published_at
      FROM blog_posts ${whereSql} ${orderSql} LIMIT ? OFFSET ?`
   ).bind(...params, limit, offset);
@@ -57,7 +57,7 @@ export async function onRequestPost({ request, env }) {
   const authError = await requireAdmin(request, env);
   if (authError) return authError;
 
-  await ensureSchema(env.DB);
+  await ensureBlogSchema(env.BLOG_DB);
 
   let body;
   try {
@@ -78,10 +78,10 @@ export async function onRequestPost({ request, env }) {
   const status = body.status === 'publicado' ? 'publicado' : 'rascunho';
 
   const baseSlug = slugify(body.slug || titulo);
-  const slug = await ensureUniqueSlug(env.DB, baseSlug);
+  const slug = await ensureUniqueSlug(env.BLOG_DB, baseSlug);
   const published_at = status === 'publicado' ? "datetime('now')" : 'NULL';
 
-  const result = await env.DB.prepare(
+  const result = await env.BLOG_DB.prepare(
     `INSERT INTO blog_posts (slug, titulo, resumo, conteudo, imagem_url, imagem_alt, autor, status, meta_description, published_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ${published_at})`
   ).bind(slug, titulo, resumo, conteudo, imagem_url, imagem_alt, autor, status, meta_description).run();

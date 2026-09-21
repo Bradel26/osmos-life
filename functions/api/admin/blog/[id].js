@@ -1,4 +1,4 @@
-import { ensureSchema } from '../../../_lib/db.js';
+import { ensureBlogSchema } from '../../../_lib/db.js';
 import { requireAdmin } from '../../../_lib/session.js';
 import { slugify } from '../../../_lib/blog-render.js';
 
@@ -21,8 +21,8 @@ export async function onRequestGet({ request, env, params }) {
   const authError = await requireAdmin(request, env);
   if (authError) return authError;
 
-  await ensureSchema(env.DB);
-  const row = await env.DB.prepare('SELECT * FROM blog_posts WHERE id = ?').bind(params.id).first();
+  await ensureBlogSchema(env.BLOG_DB);
+  const row = await env.BLOG_DB.prepare('SELECT * FROM blog_posts WHERE id = ?').bind(params.id).first();
   if (!row) return jsonError('Post não encontrado', 404);
 
   return new Response(JSON.stringify(row), { status: 200, headers: { 'Content-Type': 'application/json' } });
@@ -32,8 +32,8 @@ export async function onRequestPut({ request, env, params }) {
   const authError = await requireAdmin(request, env);
   if (authError) return authError;
 
-  await ensureSchema(env.DB);
-  const existing = await env.DB.prepare('SELECT * FROM blog_posts WHERE id = ?').bind(params.id).first();
+  await ensureBlogSchema(env.BLOG_DB);
+  const existing = await env.BLOG_DB.prepare('SELECT * FROM blog_posts WHERE id = ?').bind(params.id).first();
   if (!existing) return jsonError('Post não encontrado', 404);
 
   let body;
@@ -58,7 +58,7 @@ export async function onRequestPut({ request, env, params }) {
   let slug = existing.slug;
   const desiredBase = slugify(body.slug || titulo);
   if (desiredBase && desiredBase !== existing.slug) {
-    slug = await ensureUniqueSlug(env.DB, desiredBase, existing.id);
+    slug = await ensureUniqueSlug(env.BLOG_DB, desiredBase, existing.id);
   }
 
   // Define published_at na primeira vez que vira "publicado"; mantém caso já exista.
@@ -69,7 +69,7 @@ export async function onRequestPut({ request, env, params }) {
     publishedClause = 'published_at = NULL';
   }
 
-  await env.DB.prepare(
+  await env.BLOG_DB.prepare(
     `UPDATE blog_posts SET
        slug = ?, titulo = ?, resumo = ?, conteudo = ?, imagem_url = ?, imagem_alt = ?,
        autor = ?, status = ?, meta_description = ?, updated_at = datetime('now'), ${publishedClause}
@@ -86,8 +86,8 @@ export async function onRequestDelete({ request, env, params }) {
   const authError = await requireAdmin(request, env);
   if (authError) return authError;
 
-  await ensureSchema(env.DB);
-  const result = await env.DB.prepare('DELETE FROM blog_posts WHERE id = ?').bind(params.id).run();
+  await ensureBlogSchema(env.BLOG_DB);
+  const result = await env.BLOG_DB.prepare('DELETE FROM blog_posts WHERE id = ?').bind(params.id).run();
   if (!result.meta.changes) return jsonError('Post não encontrado', 404);
 
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });

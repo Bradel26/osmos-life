@@ -1,6 +1,6 @@
 // Página pública de listagem do Blog — /blog
 // Renderizada no servidor (HTML real) para indexação no Google.
-import { ensureSchema } from '../_lib/db.js';
+import { ensureBlogSchema } from '../_lib/db.js';
 import { renderPage, escapeHtml, formatDatePt, SITE_URL } from '../_lib/blog-render.js';
 
 const PAGE_SIZE = 9;
@@ -23,18 +23,18 @@ function renderCard(post) {
 }
 
 export async function onRequestGet({ request, env }) {
-  await ensureSchema(env.DB);
+  await ensureBlogSchema(env.BLOG_DB);
   const url = new URL(request.url);
   const page = Math.max(1, parseInt(url.searchParams.get('page'), 10) || 1);
   const offset = (page - 1) * PAGE_SIZE;
 
-  const countRow = await env.DB.prepare(
+  const countRow = await env.BLOG_DB.prepare(
     "SELECT COUNT(*) AS total FROM blog_posts WHERE status = 'publicado'"
   ).first();
   const total = countRow?.total || 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
-  const { results } = await env.DB.prepare(
+  const { results } = await env.BLOG_DB.prepare(
     `SELECT slug, titulo, resumo, imagem_url, imagem_alt, published_at, created_at
      FROM blog_posts WHERE status = 'publicado'
      ORDER BY COALESCE(published_at, created_at) DESC

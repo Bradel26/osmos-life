@@ -7,4 +7,11 @@ binding = "DB"
 database_name = "osmos-questionarios"
 database_id = "6bad8a35-3b38-4c18-a01c-209d50e10d60"
 
+# Banco dedicado ao blog (posts). O restante do site (questionários, leads,
+# raio-x) continua no binding DB acima.
+[[d1_databases]]
+binding = "BLOG_DB"
+database_name = "blog_osmos"
+database_id = "7cdc999c-a158-4935-8672-7b7f50838cf4"
+
 # redeploy

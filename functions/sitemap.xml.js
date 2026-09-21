@@ -1,6 +1,6 @@
 // Sitemap dinâmico — /sitemap.xml
 // Inclui as páginas principais + todos os posts publicados do blog.
-import { ensureSchema } from './_lib/db.js';
+import { ensureBlogSchema } from './_lib/db.js';
 import { SITE_URL } from './_lib/blog-render.js';
 
 function toW3CDate(value) {
@@ -11,7 +11,7 @@ function toW3CDate(value) {
 }
 
 export async function onRequestGet({ env }) {
-  await ensureSchema(env.DB);
+  await ensureBlogSchema(env.BLOG_DB);
 
   const staticUrls = [
     { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly' },
@@ -22,7 +22,7 @@ export async function onRequestGet({ env }) {
 
   let posts = [];
   try {
-    const { results } = await env.DB.prepare(
+    const { results } = await env.BLOG_DB.prepare(
       "SELECT slug, updated_at, published_at, created_at FROM blog_posts WHERE status = 'publicado' ORDER BY COALESCE(published_at, created_at) DESC"
     ).all();
     posts = results || [];

@@ -1,6 +1,6 @@
 // Página pública de um post do Blog — /blog/<slug>
 // Renderizada no servidor (HTML real) para indexação no Google.
-import { ensureSchema } from '../_lib/db.js';
+import { ensureBlogSchema } from '../_lib/db.js';
 import { renderPage, escapeHtml, formatDatePt, SITE_URL } from '../_lib/blog-render.js';
 
 function notFound() {
@@ -26,11 +26,11 @@ function notFound() {
 }
 
 export async function onRequestGet({ request, env, params }) {
-  await ensureSchema(env.DB);
+  await ensureBlogSchema(env.BLOG_DB);
   const slug = String(params.slug || '').toLowerCase();
   if (!slug) return notFound();
 
-  const post = await env.DB.prepare(
+  const post = await env.BLOG_DB.prepare(
     "SELECT * FROM blog_posts WHERE slug = ? AND status = 'publicado'"
   ).bind(slug).first();
 

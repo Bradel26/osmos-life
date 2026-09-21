@@ -16,10 +16,26 @@ const SCHEMA_STATEMENTS = [
   "CREATE INDEX IF NOT EXISTS idx_blog_published_at ON blog_posts(published_at)"
 ];
 
+// Statements do blog isolados, para quando o blog vive em um banco D1 próprio
+// (binding BLOG_DB). Precisa de flag separada, senão a flag compartilhada
+// impediria a criação das tabelas no segundo banco dentro do mesmo isolate.
+const BLOG_SCHEMA_STATEMENTS = [
+  "CREATE TABLE IF NOT EXISTS blog_posts (id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT NOT NULL UNIQUE, titulo TEXT NOT NULL, resumo TEXT, conteudo TEXT NOT NULL, imagem_url TEXT, imagem_alt TEXT, autor TEXT, status TEXT NOT NULL DEFAULT 'rascunho', meta_description TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT, published_at TEXT)",
+  "CREATE INDEX IF NOT EXISTS idx_blog_status ON blog_posts(status)",
+  "CREATE INDEX IF NOT EXISTS idx_blog_published_at ON blog_posts(published_at)"
+];
+
 let schemaReady = false;
+let blogSchemaReady = false;
 
 export async function ensureSchema(db) {
   if (schemaReady) return;
   await db.exec(SCHEMA_STATEMENTS.join('\n'));
   schemaReady = true;
+}
+
+export async function ensureBlogSchema(db) {
+  if (blogSchemaReady) return;
+  await db.exec(BLOG_SCHEMA_STATEMENTS.join('\n'));
+  blogSchemaReady = true;
 }
