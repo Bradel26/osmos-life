@@ -1,8 +1,8 @@
-// Renderização server-side das páginas públicas do Blog OSMOS.
-// Mantém o mesmo cabeçalho/rodapé do site para que as páginas sejam
-// totalmente indexáveis pelo Google (HTML real, com meta tags e canonical).
+// Renderização server-side da Central de Manuais e Suporte Técnico (OSMOS).
+// Reutiliza integralmente a identidade do site (cabeçalho, rodapé, tipografia,
+// cores e componentes), servindo HTML real para indexação pelo Google.
 
-const SITE_URL = 'https://osmoslife.com.br';
+export const SITE_URL = 'https://osmoslife.com.br';
 
 export function escapeHtml(value) {
   return String(value == null ? '' : value)
@@ -13,10 +13,9 @@ export function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-// Gera um slug amigável para URL a partir de um título.
 export function slugify(text) {
   return String(text || '')
-    .normalize('NFD').replace(/[̀-ͯ]/g, '') // remove acentos
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
@@ -24,16 +23,6 @@ export function slugify(text) {
     .replace(/-+/g, '-')
     .slice(0, 80)
     .replace(/^-+|-+$/g, '');
-}
-
-// Data legível em pt-BR: "14 de setembro de 2026".
-export function formatDatePt(value) {
-  if (!value) return '';
-  const iso = String(value).replace(' ', 'T') + (String(value).includes('T') ? '' : 'Z');
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return '';
-  const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
-  return `${d.getUTCDate()} de ${meses[d.getUTCMonth()]} de ${d.getUTCFullYear()}`;
 }
 
 function absoluteImage(url) {
@@ -53,11 +42,10 @@ const HEADER = `
       <ul>
         <li><a href="/#beneficios">Benefícios</a></li>
         <li><a href="/#tecnologia">Tecnologia</a></li>
-        <li><a href="/#comparacao">Comparação</a></li>
         <li><a href="/#para-quem">Para Quem É</a></li>
-        <li><a href="/manuais">Manuais</a></li>
-        <li><a href="/blog" class="active">Blog</a></li>
-        <li><a href="/#faq">FAQ</a></li>
+        <li><a href="/manuais" class="active">Manuais</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/sac.html">SAC</a></li>
       </ul>
     </nav>
     <div class="header-actions">
@@ -71,11 +59,10 @@ const HEADER = `
     <ul>
       <li><a href="/#beneficios">Benefícios</a></li>
       <li><a href="/#tecnologia">Tecnologia</a></li>
-      <li><a href="/#comparacao">Comparação</a></li>
       <li><a href="/#para-quem">Para Quem É</a></li>
-      <li><a href="/manuais">Manuais e Suporte</a></li>
+      <li><a href="/manuais" class="active">Manuais e Suporte</a></li>
       <li><a href="/blog">Blog</a></li>
-      <li><a href="/#faq">FAQ</a></li>
+      <li><a href="/sac.html">SAC</a></li>
       <li><a href="/#contato" class="btn btn-primary">Solicitar Consultoria</a></li>
     </ul>
   </div>
@@ -98,7 +85,6 @@ const FOOTER = `
         <li><a href="/#hero">Sobre</a></li>
         <li><a href="/#beneficios">Produtos</a></li>
         <li><a href="/#tecnologia">Tecnologia</a></li>
-        <li><a href="/#garantias">Assistência Técnica</a></li>
         <li><a href="/manuais">Manuais e Suporte</a></li>
         <li><a href="/blog">Blog</a></li>
       </ul>
@@ -106,6 +92,7 @@ const FOOTER = `
     <div class="footer-col">
       <h4>Contato</h4>
       <ul>
+        <li><a href="/sac.html">SAC — Atendimento</a></li>
         <li><a href="/#contato">Fale Conosco</a></li>
         <li><a href="https://wa.me/5500000000000" target="_blank" rel="noopener">WhatsApp</a></li>
         <li><a href="https://instagram.com/osmos" target="_blank" rel="noopener">Instagram</a></li>
@@ -126,8 +113,7 @@ const FOOTER = `
 </footer>
 <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">↑</button>`;
 
-// Script mínimo próprio das páginas do blog (o script.js do site espera
-// elementos que não existem aqui, então usamos um inline enxuto).
+// Comportamento mínimo do cabeçalho/menu/voltar-ao-topo (igual ao do blog).
 const INLINE_SCRIPT = `
 <script>
 (function () {
@@ -150,13 +136,23 @@ const INLINE_SCRIPT = `
     b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
   }
   var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+  // Revela elementos .fade-up ao entrar na viewport (mesmo efeito do site).
+  var faders = document.querySelectorAll('.fade-up');
+  if (!('IntersectionObserver' in window)) {
+    faders.forEach(function (el) { el.classList.add('in-view'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in-view'); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    faders.forEach(function (el) { io.observe(el); });
+  }
 })();
 </script>`;
 
-// Monta uma página completa do blog (documento HTML).
-export function renderPage({ title, description, canonicalPath, ogImage, jsonLd, bodyHtml }) {
-  const canonical = `${SITE_URL}${canonicalPath || '/blog'}`;
-  const desc = escapeHtml(description || 'Blog da OSMOS sobre qualidade da água, saúde e Osmose Reversa.');
+// Monta um documento HTML completo da Central de Manuais.
+export function renderDocument({ title, description, canonicalPath, ogImage, jsonLd, bodyHtml, bodyEndScripts, extraHead }) {
+  const canonical = `${SITE_URL}${canonicalPath || '/manuais'}`;
+  const desc = escapeHtml(description || 'Central de Manuais e Suporte Técnico OSMOS: manuais interativos, instalação, especificações, desenhos técnicos, garantia e mais.');
   const img = absoluteImage(ogImage);
   const ld = jsonLd ? `\n<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : '';
   return `<!DOCTYPE html>
@@ -168,7 +164,7 @@ export function renderPage({ title, description, canonicalPath, ogImage, jsonLd,
 <meta name="description" content="${desc}">
 <meta name="author" content="OSMOS">
 <link rel="canonical" href="${canonical}">
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:site_name" content="OSMOS">
 <meta property="og:title" content="${escapeHtml(title)}">
 <meta property="og:description" content="${desc}">
@@ -184,7 +180,7 @@ export function renderPage({ title, description, canonicalPath, ogImage, jsonLd,
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css">
-<link rel="stylesheet" href="/css/blog.css">${ld}
+<link rel="stylesheet" href="/css/manuais.css">${extraHead || ''}${ld}
 </head>
 <body>
 ${HEADER}
@@ -193,8 +189,9 @@ ${bodyHtml}
 </main>
 ${FOOTER}
 ${INLINE_SCRIPT}
+${bodyEndScripts || ''}
 </body>
 </html>`;
 }
 
-export { SITE_URL };
+export { HEADER, FOOTER };

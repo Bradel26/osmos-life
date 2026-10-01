@@ -25,8 +25,22 @@ const BLOG_SCHEMA_STATEMENTS = [
   "CREATE INDEX IF NOT EXISTS idx_blog_published_at ON blog_posts(published_at)"
 ];
 
+// Central de Manuais e Suporte Técnico.
+// Cada produto é uma linha; todo o manual interativo (visão geral, componentes,
+// instalação, especificações, desenhos, uso, manutenção, solução de problemas,
+// FAQ, garantia, dicas, hotspots e config 3D) fica no campo estruturado
+// conteudo_json, permitindo que o admin adicione/edite tudo — inclusive novos
+// hotspots — sem reconstruir a página.
+const MANUAIS_SCHEMA_STATEMENTS = [
+  "CREATE TABLE IF NOT EXISTS produtos_manual (id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT NOT NULL UNIQUE, nome TEXT NOT NULL, modelo TEXT, sku TEXT, categoria TEXT, keywords TEXT, descricao_curta TEXT, imagem_url TEXT, imagem_alt TEXT, status TEXT NOT NULL DEFAULT 'rascunho', ordem INTEGER NOT NULL DEFAULT 0, conteudo_json TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT, published_at TEXT)",
+  "CREATE INDEX IF NOT EXISTS idx_manual_status ON produtos_manual(status)",
+  "CREATE INDEX IF NOT EXISTS idx_manual_categoria ON produtos_manual(categoria)",
+  "CREATE INDEX IF NOT EXISTS idx_manual_ordem ON produtos_manual(ordem)"
+];
+
 let schemaReady = false;
 let blogSchemaReady = false;
+let manuaisSchemaReady = false;
 
 export async function ensureSchema(db) {
   if (schemaReady) return;
@@ -38,4 +52,10 @@ export async function ensureBlogSchema(db) {
   if (blogSchemaReady) return;
   await db.exec(BLOG_SCHEMA_STATEMENTS.join('\n'));
   blogSchemaReady = true;
+}
+
+export async function ensureManuaisSchema(db) {
+  if (manuaisSchemaReady) return;
+  await db.exec(MANUAIS_SCHEMA_STATEMENTS.join('\n'));
+  manuaisSchemaReady = true;
 }

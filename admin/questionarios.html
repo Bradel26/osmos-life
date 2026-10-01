@@ -28,6 +28,7 @@
   <button type="button" class="tab-btn" data-tab="raiox">Diagnóstico da Água</button>
   <button type="button" class="tab-btn" data-tab="leads">Cadastros do Site</button>
   <button type="button" class="tab-btn" data-tab="blog">Blog</button>
+  <button type="button" class="tab-btn" data-tab="manuais">Manuais</button>
 </nav>
 
 <main class="page">
@@ -431,6 +432,137 @@
 
   </section>
 
+  <!-- ===== Aba: Manuais ===== -->
+  <section class="tab-panel" data-tab-panel="manuais" hidden>
+
+    <!-- Lista de produtos -->
+    <section class="panel" id="manualListPanel">
+      <div class="panel-header">
+        <h2 id="manualResultCount">Produtos</h2>
+        <div class="toolbar">
+          <label class="field field-inline">
+            <span class="sr-only">Filtrar por status</span>
+            <select id="manualStatusFilter">
+              <option value="">Todos os status</option>
+              <option value="publicado">Publicados</option>
+              <option value="rascunho">Rascunhos</option>
+            </select>
+          </label>
+          <button type="button" class="btn btn-primary btn-sm" id="manualNewBtn">+ Novo produto</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th data-sort="ordem">Ordem</th>
+              <th data-sort="nome">Produto</th>
+              <th data-sort="modelo">Modelo</th>
+              <th data-sort="status">Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="manualTableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="manualEmptyState" hidden>Nenhum produto ainda. Clique em “Novo produto” para começar.</div>
+      <div class="loading-state" id="manualLoadingState">Carregando...</div>
+      <div class="pagination">
+        <span class="muted" id="manualPageInfo"></span>
+        <div class="pages">
+          <button type="button" class="btn btn-ghost btn-sm" id="manualPrevPageBtn">‹ Anterior</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="manualNextPageBtn">Próxima ›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editor de produto -->
+    <section class="panel" id="manualEditorPanel" hidden>
+      <div class="panel-header">
+        <h2 id="manualEditorTitle">Novo produto</h2>
+        <div class="toolbar">
+          <a class="btn btn-ghost btn-sm" id="manualPreviewLink" href="#" target="_blank" rel="noopener" hidden>Ver no site ↗</a>
+          <button type="button" class="btn btn-ghost btn-sm" id="manualCancelBtn">Cancelar</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <form id="manualEditorForm">
+          <input type="hidden" id="mId">
+          <div class="filters-grid">
+            <div class="field">
+              <label for="mNome">Nome do produto *</label>
+              <input type="text" id="mNome" maxlength="160" required placeholder="Ex.: Purificador OSMOS A9Plus">
+            </div>
+            <div class="field">
+              <label for="mModelo">Modelo</label>
+              <input type="text" id="mModelo" maxlength="80" placeholder="Ex.: A9Plus">
+            </div>
+            <div class="field">
+              <label for="mSku">Código / SKU</label>
+              <input type="text" id="mSku" maxlength="80" placeholder="Ex.: OSMOS-A9PLUS">
+            </div>
+            <div class="field">
+              <label for="mCategoria">Categoria</label>
+              <input type="text" id="mCategoria" maxlength="120" placeholder="Ex.: Purificadores por Osmose Reversa">
+            </div>
+            <div class="field">
+              <label for="mOrdem">Ordem de exibição</label>
+              <input type="number" id="mOrdem" value="0" min="0">
+            </div>
+            <div class="field">
+              <label for="mStatus">Status</label>
+              <select id="mStatus">
+                <option value="rascunho">Rascunho (não aparece no site)</option>
+                <option value="publicado">Publicado (visível no site)</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="mSlug">Endereço (slug)</label>
+            <input type="text" id="mSlug" maxlength="80" placeholder="gerado automaticamente a partir do nome/modelo">
+            <span class="field-hint">Deixe em branco para gerar. Ex.: <code>/manuais/purificador-osmos-a9plus</code></span>
+          </div>
+          <div class="field">
+            <label for="mDescricao">Descrição curta (aparece no card e no topo do manual)</label>
+            <textarea id="mDescricao" rows="2" maxlength="300" placeholder="Uma ou duas frases que resumem o produto."></textarea>
+          </div>
+          <div class="filters-grid">
+            <div class="field">
+              <label for="mImagemUrl">URL da imagem do produto</label>
+              <input type="url" id="mImagemUrl" placeholder="https://... (opcional; sem imagem usa ilustração técnica)">
+            </div>
+            <div class="field">
+              <label for="mImagemAlt">Descrição da imagem (alt)</label>
+              <input type="text" id="mImagemAlt" maxlength="180" placeholder="Descreva a imagem para acessibilidade/SEO">
+            </div>
+            <div class="field">
+              <label for="mKeywords">Palavras-chave de busca</label>
+              <input type="text" id="mKeywords" maxlength="300" placeholder="termos relacionados, separados por espaço">
+            </div>
+          </div>
+          <div class="field">
+            <label for="mConteudo">Conteúdo do manual (estrutura JSON)
+              <span class="field-hint">Seções, componentes, instalação, especificações, desenhos, uso, manutenção, solução de problemas, FAQ, garantia, dicas e <strong>hotspots do 3D</strong>. Novos hotspots podem ser adicionados aqui sem reconstruir a página.</span>
+            </label>
+            <div class="toolbar" style="margin-bottom:0.6rem; gap:0.5rem;">
+              <button type="button" class="btn btn-ghost btn-sm" id="manualTemplateBtn">Carregar modelo de exemplo</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="manualValidateBtn">Validar JSON</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="manualFormatBtn">Formatar</button>
+              <span class="muted" id="manualJsonStatus"></span>
+            </div>
+            <textarea id="mConteudo" rows="20" spellcheck="false" style="font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.82rem;" placeholder='{ "visaoGeral": { ... }, "hotspots": [ ... ] }'></textarea>
+          </div>
+          <div class="filters-actions">
+            <button type="submit" class="btn btn-primary btn-sm" id="manualSaveBtn">Salvar</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="manualCancelBtn2">Cancelar</button>
+            <span class="muted" id="manualSaveStatus"></span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </section>
+
 </main>
 
 <!-- Modal de visualização -->
@@ -449,5 +581,6 @@
 <script src="js/admin-raiox.js"></script>
 <script src="js/admin-leads.js"></script>
 <script src="js/admin-blog.js"></script>
+<script src="js/admin-manuais.js"></script>
 </body>
 </html>

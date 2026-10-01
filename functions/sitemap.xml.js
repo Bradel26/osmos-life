@@ -1,6 +1,7 @@
 // Sitemap dinâmico — /sitemap.xml
 // Inclui as páginas principais + todos os posts publicados do blog.
-import { ensureBlogSchema } from './_lib/db.js';
+import { ensureBlogSchema, ensureManuaisSchema } from './_lib/db.js';
+import { seedManuais } from './_lib/manuais-data.js';
 import { SITE_URL } from './_lib/blog-render.js';
 
 function toW3CDate(value) {
@@ -16,6 +17,7 @@ export async function onRequestGet({ env }) {
   const staticUrls = [
     { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly' },
     { loc: `${SITE_URL}/blog`, priority: '0.8', changefreq: 'weekly' },
+    { loc: `${SITE_URL}/manuais`, priority: '0.8', changefreq: 'weekly' },
     { loc: `${SITE_URL}/quiz.html`, priority: '0.5', changefreq: 'monthly' },
     { loc: `${SITE_URL}/raio-x-agua.html`, priority: '0.5', changefreq: 'monthly' },
     { loc: `${SITE_URL}/sac.html`, priority: '0.6', changefreq: 'monthly' }
@@ -39,10 +41,30 @@ export async function onRequestGet({ env }) {
       `  </url>`;
   };
 
+  let manuais = [];
+  try {
+    await ensureManuaisSchema(env.DB);
+    await seedManuais(env.DB);
+    const { results } = await env.DB.prepare(
+      "SELECT slug, updated_at, published_at, created_at FROM produtos_manual WHERE status = 'publicado' ORDER BY ordem ASC"
+    ).all();
+    manuais = results || [];
+  } catch (err) {
+    manuais = [];
+  }
+
   const entries = staticUrls.map(urlXml);
   posts.forEach(function (p) {
     entries.push(urlXml({
       loc: `${SITE_URL}/blog/${p.slug}`,
+      lastmod: toW3CDate(p.updated_at || p.published_at || p.created_at),
+      changefreq: 'monthly',
+      priority: '0.7'
+    }));
+  });
+  manuais.forEach(function (p) {
+    entries.push(urlXml({
+      loc: `${SITE_URL}/manuais/${p.slug}`,
       lastmod: toW3CDate(p.updated_at || p.published_at || p.created_at),
       changefreq: 'monthly',
       priority: '0.7'
