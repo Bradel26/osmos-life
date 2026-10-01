@@ -17,7 +17,8 @@ export async function onRequestGet({ env }) {
     { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly' },
     { loc: `${SITE_URL}/blog`, priority: '0.8', changefreq: 'weekly' },
     { loc: `${SITE_URL}/quiz.html`, priority: '0.5', changefreq: 'monthly' },
-    { loc: `${SITE_URL}/raio-x-agua.html`, priority: '0.5', changefreq: 'monthly' }
+    { loc: `${SITE_URL}/raio-x-agua.html`, priority: '0.5', changefreq: 'monthly' },
+    { loc: `${SITE_URL}/sac.html`, priority: '0.6', changefreq: 'monthly' }
   ];
 
   let posts = [];
