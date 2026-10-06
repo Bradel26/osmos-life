@@ -139,6 +139,29 @@
 .sac-form-actions { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.4rem; }
 .sac-form-note { font-size: 0.8rem; color: var(--ink-soft); }
 
+/* Pergunta de risco (sim/não) e consentimento LGPD */
+.sac-question { font-size: 0.85rem; font-weight: 600; color: var(--ink); }
+.sac-radio { display: flex; gap: 1.5rem; }
+.sac-radio label,
+.sac-consent {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-weight: 400;
+  color: var(--ink);
+  cursor: pointer;
+}
+.sac-consent { font-size: 0.85rem; line-height: 1.45; color: var(--ink-soft); }
+.sac-form .sac-radio input,
+.sac-form .sac-consent input {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0.1rem 0 0;
+  flex-shrink: 0;
+  accent-color: var(--blue-accent);
+}
+
 /* ============ Confirmação / Protocolo ============ */
 .sac-success { display: none; }
 .sac-success.show { display: block; }
@@ -168,7 +191,8 @@
 .sac-protocol-label { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue-deep); display: block; margin-bottom: 0.35rem; }
 .sac-protocol-number { font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 1.9rem); color: var(--navy-950); letter-spacing: 0.04em; }
 .sac-protocol-pending { margin-top: 1.5rem; font-size: 0.9rem; color: var(--ink-soft); }
-.sac-success-actions { margin-top: 2rem; }
+.sac-success-actions { margin-top: 2rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
+.sac-success-actions [hidden] { display: none; }
 
 /* ============ Outros canais ============ */
 .sac-channels-grid {
