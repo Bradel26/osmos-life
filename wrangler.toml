@@ -2,6 +2,12 @@ name = "osmos-life"
 compatibility_date = "2026-01-01"
 pages_build_output_dir = "."
 
+# Integracao do SAC (/api/sac) com o modulo SAC do Nexus. Nao sao sigilosas.
+# A chave fica como segredo no painel: SAC_API_KEY (Producao e Preview).
+[vars]
+SAC_API_URL = "https://nexus.bradel.com.br/modulo-sac/api/v1"
+SAC_ACOMPANHAR_URL = "https://nexus.bradel.com.br/modulo-sac/acompanhar"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "osmos-questionarios"
