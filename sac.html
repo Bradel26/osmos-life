@@ -203,6 +203,14 @@
             <textarea id="sacDescricao" name="descricao" placeholder="Descreva com o máximo de detalhes o que você precisa. Quanto mais informações, melhor conseguimos ajudar." required></textarea>
           </div>
 
+          <div class="field field-full">
+            <span class="sac-question">Há risco à saúde ou segurança? <span class="optional">(choque elétrico, água imprópria para consumo, vazamento com dano)</span></span>
+            <div class="sac-radio" role="radiogroup">
+              <label><input type="radio" name="risco" value="nao" required checked> Não</label>
+              <label><input type="radio" name="risco" value="sim"> Sim</label>
+            </div>
+          </div>
+
           <div class="sac-file">
             <label class="sac-file-label" for="sacAnexo">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12l-8.5 8.5a5 5 0 01-7-7L14 5a3.5 3.5 0 015 5l-8.5 8.5a2 2 0 01-3-3L15 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -213,8 +221,13 @@
           </div>
 
           <div class="sac-form-actions">
+            <label class="sac-consent">
+              <input type="checkbox" name="consentimento" value="sim" required>
+              <span>Autorizo a OSMOS a utilizar estes dados para responder à minha solicitação.</span>
+            </label>
+            <!-- Turnstile (anti-robô): preencha data-sitekey com a site key do Cloudflare para ativar. -->
+            <div id="sacTurnstile" data-sitekey=""></div>
             <button type="submit" class="btn btn-primary btn-full" id="sacSubmitBtn">Enviar solicitação</button>
-            <p class="sac-form-note">Ao enviar, você concorda que a OSMOS utilize estes dados para responder à sua solicitação.</p>
           </div>
         </form>
       </div>
@@ -237,10 +250,11 @@
           </div>
 
           <p class="sac-protocol-pending" id="sacProtocolPending" hidden>
-            Assim que sua solicitação for registrada, você receberá o número de protocolo por e-mail.
+            Não recebemos o número de protocolo. Nossa equipe entrará em contato pelo e-mail informado.
           </p>
 
           <div class="sac-success-actions">
+            <a id="sacTrackingLink" class="btn btn-primary" href="#" target="_blank" rel="noopener" hidden>Acompanhar protocolo</a>
             <a href="index.html" class="btn btn-outline-dark">Voltar ao site</a>
           </div>
         </div>
