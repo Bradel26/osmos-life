@@ -171,9 +171,10 @@
       var svg = lbCanvas.querySelector('svg');
       if (svg) svg.style.transform = 'scale(1)';
       lb.hidden = false;
+      lb.classList.add('is-open');
       document.body.style.overflow = 'hidden';
     }
-    function close() { lb.hidden = true; lbCanvas.innerHTML = ''; document.body.style.overflow = ''; }
+    function close() { lb.classList.remove('is-open'); lb.hidden = true; lbCanvas.innerHTML = ''; document.body.style.overflow = ''; }
 
     document.querySelectorAll('.draw-canvas[data-zoomable], .draw-zoom-btn').forEach(function (el) {
       el.addEventListener('click', function () {

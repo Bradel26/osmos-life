@@ -434,7 +434,7 @@ export async function onRequestGet({ env, params }) {
     jsonLd: faqLd,
     bodyHtml,
     extraHead: '\n<style>:root{scroll-padding-top:150px}</style>',
-    bodyEndScripts: '<script src="/js/manual.js" defer></script>'
+    bodyEndScripts: '<script src="/js/manual.js?v=20261006-lightbox" defer></script>'
   });
 
   return new Response(html, {

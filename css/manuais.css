@@ -289,7 +289,10 @@
 .draw-dims span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-accent); font-weight: 700; }
 .draw-dims strong { color: var(--navy-950); font-size: 0.95rem; }
 
-.draw-lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(5,11,20,0.92); display: flex; align-items: center; justify-content: center; padding: 3vw; }
+/* Fechado por padrão: só aparece com a classe .is-open (aplicada ao clicar num
+   desenho). Nunca cobre a tela no load, mesmo sem JS ou com CSS em cache antigo. */
+.draw-lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(5,11,20,0.92); display: none; align-items: center; justify-content: center; padding: 3vw; }
+.draw-lightbox.is-open { display: flex; }
 .draw-lightbox-canvas { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--white); overflow: auto; }
 .draw-lightbox-canvas svg { max-width: 92vw; max-height: 88vh; width: auto; height: auto; transition: transform var(--dur-fast); }
 .draw-lightbox-close { position: fixed; top: 1.5rem; right: 1.8rem; width: 46px; height: 46px; border-radius: 50%; background: rgba(255,255,255,0.12); color: var(--white); font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.25); }
