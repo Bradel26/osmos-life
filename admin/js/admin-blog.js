@@ -38,6 +38,11 @@
     fConteudo: document.getElementById('bConteudo'),
     fImagemUrl: document.getElementById('bImagemUrl'),
     fImagemAlt: document.getElementById('bImagemAlt'),
+    fImagemFile: document.getElementById('bImagemFile'),
+    fImagemPreview: document.getElementById('bImagemPreview'),
+    imagemUploadBtn: document.getElementById('bImagemUploadBtn'),
+    imagemRemoveBtn: document.getElementById('bImagemRemoveBtn'),
+    imagemUploadStatus: document.getElementById('bImagemUploadStatus'),
     fAutor: document.getElementById('bAutor'),
     fStatus: document.getElementById('bStatus'),
     fMetaDescription: document.getElementById('bMetaDescription')
@@ -142,11 +147,27 @@
     loadList();
   }
 
+  function setCoverPreview(url) {
+    var u = (url || '').trim();
+    if (u) {
+      els.fImagemPreview.src = u;
+      els.fImagemPreview.hidden = false;
+      els.imagemRemoveBtn.hidden = false;
+    } else {
+      els.fImagemPreview.removeAttribute('src');
+      els.fImagemPreview.hidden = true;
+      els.imagemRemoveBtn.hidden = true;
+    }
+  }
+
   function resetForm() {
     els.form.reset();
     els.fId.value = '';
     els.fStatus.value = 'rascunho';
     els.previewLink.hidden = true;
+    if (els.fImagemFile) els.fImagemFile.value = '';
+    if (els.imagemUploadStatus) els.imagemUploadStatus.textContent = '';
+    setCoverPreview('');
   }
 
   function fillForm(post) {
@@ -156,6 +177,7 @@
     els.fResumo.value = post.resumo || '';
     els.fConteudo.value = post.conteudo || '';
     els.fImagemUrl.value = post.imagem_url || '';
+    setCoverPreview(post.imagem_url || '');
     els.fImagemAlt.value = post.imagem_alt || '';
     els.fAutor.value = post.autor || '';
     els.fStatus.value = post.status === 'publicado' ? 'publicado' : 'rascunho';
@@ -241,10 +263,91 @@
     apiFetch('/api/admin/blog/' + id, { method: 'DELETE' }).then(function () { loadList(); });
   }
 
+  /* ===== Upload de imagem de capa ===== */
+  var MAX_DIM = 1600;
+  var ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+  // Redimensiona (máx. 1600px) e recomprime em JPEG no próprio navegador, para
+  // manter a capa leve e dentro do limite do storage. GIF passa intacto.
+  function optimizeImage(file) {
+    if (file.type === 'image/gif') return Promise.resolve(file);
+    return new Promise(function (resolve) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () {
+        var w = img.naturalWidth || 1;
+        var h = img.naturalHeight || 1;
+        var scale = Math.min(1, MAX_DIM / Math.max(w, h));
+        var cw = Math.max(1, Math.round(w * scale));
+        var ch = Math.max(1, Math.round(h * scale));
+        var canvas = document.createElement('canvas');
+        canvas.width = cw;
+        canvas.height = ch;
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.drawImage(img, 0, 0, cw, ch);
+        URL.revokeObjectURL(url);
+        canvas.toBlob(function (blob) {
+          resolve(blob && blob.size < file.size ? blob : file);
+        }, 'image/jpeg', 0.82);
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); resolve(file); };
+      img.src = url;
+    });
+  }
+
+  function uploadCover(file) {
+    if (!file) return;
+    if (ALLOWED_TYPES.indexOf(file.type) === -1) {
+      els.imagemUploadStatus.textContent = 'Formato não suportado (use JPG, PNG, WebP ou GIF).';
+      return;
+    }
+    els.imagemUploadBtn.disabled = true;
+    els.imagemUploadStatus.textContent = 'Otimizando…';
+    optimizeImage(file).then(function (blob) {
+      els.imagemUploadStatus.textContent = 'Enviando…';
+      var fd = new FormData();
+      fd.append('file', blob, file.name || 'capa.jpg');
+      return apiFetch('/api/admin/blog/upload', { method: 'POST', body: fd });
+    }).then(function (res) {
+      return res.json().then(function (data) { return { ok: res.ok, data: data }; });
+    }).then(function (r) {
+      els.imagemUploadBtn.disabled = false;
+      if (!r.ok) {
+        els.imagemUploadStatus.textContent = (r.data && r.data.error) || 'Erro ao enviar.';
+        return;
+      }
+      els.fImagemUrl.value = r.data.url;
+      setCoverPreview(r.data.url);
+      var kb = Math.round((r.data.size || 0) / 1024);
+      els.imagemUploadStatus.textContent = 'Imagem enviada (' + kb + ' KB). Salve o post para aplicar.';
+    }).catch(function (err) {
+      els.imagemUploadBtn.disabled = false;
+      if (err.message !== 'unauthorized') {
+        els.imagemUploadStatus.textContent = 'Erro ao enviar.';
+        console.error(err);
+      }
+    });
+  }
+
   /* ===== Eventos ===== */
   els.newBtn.addEventListener('click', openNew);
   els.cancelBtn.addEventListener('click', showList);
   els.cancelBtn2.addEventListener('click', showList);
+
+  els.imagemUploadBtn.addEventListener('click', function () { els.fImagemFile.click(); });
+  els.fImagemFile.addEventListener('change', function () {
+    var f = els.fImagemFile.files && els.fImagemFile.files[0];
+    els.fImagemFile.value = '';
+    if (f) uploadCover(f);
+  });
+  els.imagemRemoveBtn.addEventListener('click', function () {
+    els.fImagemUrl.value = '';
+    setCoverPreview('');
+    els.imagemUploadStatus.textContent = 'Capa removida. Salve o post para aplicar.';
+  });
+  els.fImagemUrl.addEventListener('change', function () { setCoverPreview(els.fImagemUrl.value); });
 
   els.statusFilter.addEventListener('change', function () {
     state.status = els.statusFilter.value;

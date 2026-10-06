@@ -22,7 +22,11 @@ const SCHEMA_STATEMENTS = [
 const BLOG_SCHEMA_STATEMENTS = [
   "CREATE TABLE IF NOT EXISTS blog_posts (id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT NOT NULL UNIQUE, titulo TEXT NOT NULL, resumo TEXT, conteudo TEXT NOT NULL, imagem_url TEXT, imagem_alt TEXT, autor TEXT, status TEXT NOT NULL DEFAULT 'rascunho', meta_description TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT, published_at TEXT)",
   "CREATE INDEX IF NOT EXISTS idx_blog_status ON blog_posts(status)",
-  "CREATE INDEX IF NOT EXISTS idx_blog_published_at ON blog_posts(published_at)"
+  "CREATE INDEX IF NOT EXISTS idx_blog_published_at ON blog_posts(published_at)",
+  // Imagens enviadas pelo painel (capas). Os bytes ficam no próprio D1 e são
+  // servidos por /blog-media/:id com cache longo. Cada upload gera uma linha
+  // nova (id novo), então trocar a capa muda a URL e invalida o cache.
+  "CREATE TABLE IF NOT EXISTS blog_media (id INTEGER PRIMARY KEY AUTOINCREMENT, created_at TEXT NOT NULL DEFAULT (datetime('now')), mime TEXT NOT NULL, filename TEXT, size INTEGER, bytes BLOB NOT NULL)"
 ];
 
 // Central de Manuais e Suporte Técnico.

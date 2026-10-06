@@ -397,9 +397,17 @@
             <textarea id="bConteudo" rows="16" required placeholder="<p>Escreva aqui o corpo do artigo...</p>"></textarea>
           </div>
           <div class="filters-grid">
-            <div class="field">
-              <label for="bImagemUrl">URL da imagem de capa</label>
-              <input type="url" id="bImagemUrl" placeholder="https://...">
+            <div class="field" style="grid-column:1 / -1;">
+              <label for="bImagemUrl">Imagem de capa</label>
+              <img id="bImagemPreview" alt="" hidden style="max-width:320px;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;display:block;margin-bottom:8px;border:1px solid #e5e7eb;background:#f3f4f6;">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">
+                <input type="file" id="bImagemFile" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+                <button type="button" class="btn btn-ghost btn-sm" id="bImagemUploadBtn">Enviar imagem…</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="bImagemRemoveBtn" hidden>Remover capa</button>
+                <span class="muted" id="bImagemUploadStatus" style="font-size:0.8rem;"></span>
+              </div>
+              <input type="url" id="bImagemUrl" placeholder="/blog-media/… (preenchido ao enviar) ou cole uma URL externa">
+              <small class="muted" style="font-size:0.75rem;">JPG, PNG, WebP ou GIF. A imagem é otimizada automaticamente antes do envio.</small>
             </div>
             <div class="field">
               <label for="bImagemAlt">Descrição da imagem (alt)</label>
