@@ -39,7 +39,18 @@ async function turnstileValido(env, token, ip) {
   return dados.success === true;
 }
 
+// Valores colados no painel podem vir com espaco, quebra de linha ou barra final.
+function variavel(env, nome) {
+  return String(env[nome] || '').trim().replace(/\/+$/, '');
+}
+
 export async function onRequestPost({ request, env }) {
+  const apiUrl = variavel(env, 'SAC_API_URL');
+  const apiKey = variavel(env, 'SAC_API_KEY');
+  if (!apiUrl || !apiKey) {
+    return resposta(503, { ok: false, erro: 'Não foi possível registrar sua solicitação agora.', ref: 'config' });
+  }
+
   const ip = request.headers.get('CF-Connecting-IP') || '';
 
   let form;
@@ -66,10 +77,10 @@ export async function onRequestPost({ request, env }) {
     consentimento: texto(form, 'consentimento') === 'sim',
   };
 
-  const cabecalhos = { 'x-api-key': env.SAC_API_KEY, 'x-cliente-ip': ip };
+  const cabecalhos = { 'x-api-key': apiKey, 'x-cliente-ip': ip };
   let caso;
   try {
-    const r = await fetch(`${env.SAC_API_URL}/integracao/site/cases`, {
+    const r = await fetch(`${apiUrl}/integracao/site/cases`, {
       method: 'POST',
       headers: { ...cabecalhos, 'Content-Type': 'application/json' },
       body: JSON.stringify(solicitacao),
@@ -79,10 +90,15 @@ export async function onRequestPost({ request, env }) {
       // 400 (validacao) e 429 (limite) trazem mensagem util ao cliente; o resto vira erro generico.
       const mensagem = Array.isArray(caso.message) ? caso.message[0] : caso.message;
       const util = (r.status === 400 || r.status === 429) && mensagem;
-      return resposta(r.status === 429 ? 429 : 502, { ok: false, erro: util || 'Não foi possível registrar sua solicitação agora.' });
+      // ref: codigo devolvido pelo Nexus, para diagnostico (401 = chave, 404 = endereco).
+      return resposta(r.status === 429 ? 429 : 502, {
+        ok: false,
+        erro: util || 'Não foi possível registrar sua solicitação agora.',
+        ref: `nexus-${r.status}`,
+      });
     }
   } catch {
-    return resposta(502, { ok: false, erro: 'Não foi possível registrar sua solicitação agora.' });
+    return resposta(502, { ok: false, erro: 'Não foi possível registrar sua solicitação agora.', ref: 'nexus-indisponivel' });
   }
 
   // Anexo: falha aqui nao derruba o protocolo ja aberto; a equipe pede o arquivo na triagem.
@@ -94,7 +110,7 @@ export async function onRequestPost({ request, env }) {
       try {
         const corpo = new FormData();
         corpo.append('file', anexo, anexo.name);
-        const r = await fetch(`${env.SAC_API_URL}/integracao/site/cases/${encodeURIComponent(caso.trackingToken)}/anexo`, {
+        const r = await fetch(`${apiUrl}/integracao/site/cases/${encodeURIComponent(caso.trackingToken)}/anexo`, {
           method: 'POST',
           headers: cabecalhos,
           body: corpo,
@@ -109,7 +125,7 @@ export async function onRequestPost({ request, env }) {
   return resposta(200, {
     ok: true,
     protocolo: caso.protocolo,
-    acompanhamento: caso.trackingToken ? `${env.SAC_ACOMPANHAR_URL}/${caso.trackingToken}` : null,
+    acompanhamento: caso.trackingToken ? `${variavel(env, 'SAC_ACOMPANHAR_URL')}/${caso.trackingToken}` : null,
     anexoRecebido,
   });
 }
