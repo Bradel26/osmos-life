@@ -88,17 +88,19 @@ export async function onRequestPost({ request, env }) {
     caso = await r.json().catch(() => ({}));
     if (!r.ok) {
       // 400 (validacao) e 429 (limite) trazem mensagem util ao cliente; o resto vira erro generico.
+      // Nunca 502/504: no dominio proprio o Cloudflare troca essas respostas pela pagina de erro dele.
       const mensagem = Array.isArray(caso.message) ? caso.message[0] : caso.message;
-      const util = (r.status === 400 || r.status === 429) && mensagem;
+      const repassa = r.status === 400 || r.status === 429;
+      const util = repassa && mensagem;
       // ref: codigo devolvido pelo Nexus, para diagnostico (401 = chave, 404 = endereco).
-      return resposta(r.status === 429 ? 429 : 502, {
+      return resposta(repassa ? r.status : 503, {
         ok: false,
         erro: util || 'Não foi possível registrar sua solicitação agora.',
         ref: `nexus-${r.status}`,
       });
     }
   } catch {
-    return resposta(502, { ok: false, erro: 'Não foi possível registrar sua solicitação agora.', ref: 'nexus-indisponivel' });
+    return resposta(503, { ok: false, erro: 'Não foi possível registrar sua solicitação agora.', ref: 'nexus-indisponivel' });
   }
 
   // Anexo: falha aqui nao derruba o protocolo ja aberto; a equipe pede o arquivo na triagem.
