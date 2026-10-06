@@ -223,10 +223,8 @@
 .hotspot-popover-close { position: absolute; top: 0.6rem; right: 0.7rem; font-size: 1.1rem; color: var(--ink-soft); background: none; }
 
 /* ---------- Componentes ---------- */
-.component-layout { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 3rem; align-items: center; margin-top: 2rem; }
-.component-figure { display: flex; justify-content: center; color: var(--blue-deep); }
-.component-figure svg { height: 360px; width: auto; }
-.component-list { display: grid; gap: 1rem; }
+.component-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; align-items: start; margin-top: 2rem; }
+.component-list { display: grid; gap: 1rem; list-style: none; margin: 0; padding: 0; min-width: 0; }
 .component-item { display: flex; gap: 1rem; padding: 1.1rem 1.2rem; background: var(--white); border: 1px solid rgba(15,33,56,0.07); border-radius: 14px; transition: border-color var(--dur-fast), transform var(--dur-fast); }
 .component-item:hover { border-color: rgba(79,195,232,0.4); transform: translateX(4px); }
 .component-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--navy-950); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 700; }
@@ -279,7 +277,7 @@
 .draw-stage { position: relative; }
 .draw-panel { display: none; grid-template-columns: 1.3fr 0.7fr; gap: 2rem; align-items: center; background: var(--white); border: 1px solid rgba(15,33,56,0.08); border-radius: 20px; padding: 2rem; }
 .draw-panel.active { display: grid; }
-.draw-canvas { display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(45deg, rgba(15,33,56,0.015), rgba(15,33,56,0.015) 10px, transparent 10px, transparent 20px), var(--off-white); border-radius: 14px; padding: 1.5rem; min-height: 320px; color: var(--navy-900); cursor: zoom-in; }
+.draw-canvas { display: flex; align-items: center; justify-content: center; background: var(--white); border-radius: 14px; padding: 1.5rem; min-height: 320px; color: var(--navy-900); cursor: zoom-in; }
 .draw-canvas svg { height: 320px; width: auto; max-width: 100%; }
 .draw-panel figcaption { display: flex; flex-direction: column; gap: 0.5rem; }
 .draw-panel figcaption strong { font-size: 1.1rem; color: var(--navy-950); font-family: var(--font-display); }
@@ -290,7 +288,7 @@
 .draw-dims strong { color: var(--navy-950); font-size: 0.95rem; }
 
 /* Fechado por padrão: só aparece com a classe .is-open (aplicada ao clicar num
-   desenho). Nunca cobre a tela no load, mesmo sem JS ou com CSS em cache antigo. */
+   desenho/foto). Nunca cobre a tela no load, mesmo sem JS ou com CSS em cache. */
 .draw-lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(5,11,20,0.92); display: none; align-items: center; justify-content: center; padding: 3vw; }
 .draw-lightbox.is-open { display: flex; }
 .draw-lightbox-canvas { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--white); overflow: auto; }
@@ -364,16 +362,56 @@
   .feature-grid, .antes-grid { grid-template-columns: repeat(2, 1fr); }
   .manual-top-grid { grid-template-columns: 1fr; }
   .manual-top-art { display: none; }
-  .component-layout { grid-template-columns: 1fr; gap: 2rem; }
-  .component-figure svg { height: 280px; }
   .draw-panel { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   .manual-finder-bar { grid-template-columns: 1fr; }
   .manual-filter select { width: 100%; }
   .manual-grid { grid-template-columns: 1fr; }
+  .component-layout { grid-template-columns: 1fr; gap: 1rem; }
   .feature-grid, .antes-grid, .manut-grid, .callout-cards { grid-template-columns: 1fr; }
   .trouble-controls { grid-template-columns: 1fr; }
   .install-step { flex-direction: column; gap: 0.6rem; }
   .manuais-help-inner, .manual-sac-inner, .manuais-cta-band { flex-direction: column; align-items: flex-start; }
 }
+
+/* Fotografias e documentação fornecidas do A9Plus. */
+.draw-lightbox[hidden], .hotspot-popover[hidden], .smart-results[hidden], .manual-noresults[hidden] { display: none; }
+.manual-top-art img { width: 100%; max-width: 300px; max-height: 420px; object-fit: contain; border-radius: 16px; }
+.draw-canvas img { display: block; max-width: 100%; max-height: 560px; width: auto; height: auto; object-fit: contain; }
+.draw-lightbox-canvas img { max-width: 92vw; max-height: 88vh; width: auto; height: auto; transition: transform var(--dur-fast); }
+.manual-photo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.manual-photo-grid .draw-panel { display: block; margin: 0; min-width: 0; padding: .5rem; }
+.manual-photo-button { width: 100%; padding: 0; border: 0; min-height: 0; overflow: hidden; }
+.manual-photo-button { background: #fff; }
+.manual-photo-button img { width: 100%; height: 320px; object-fit: contain; }
+.manual-photo-button:focus-visible { outline: 3px solid var(--blue-deep); outline-offset: 4px; }
+.manual-photo-grid figcaption { padding: .75rem; font-size: .85rem; }
+@media (max-width: 900px) { .manual-photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .manual-photo-button img { height: 220px; } .draw-canvas { padding: .5rem; } }
+
+/* Visualizador 360°: imagem estática até WebGL/texturas estarem prontos. */
+.product360 { max-width: 980px; margin: 0 auto; background: #fff; border: 1px solid rgba(15,33,56,.1); border-radius: 24px; overflow: hidden; }
+.product360-stage { height: clamp(340px, 52vw, 560px); position: relative; background: #fff; }
+.product360-stage canvas, .product360-poster { width: 100%; height: 100%; display: block; }
+.product360-stage canvas { cursor: grab; touch-action: none; }
+.product360-stage canvas.dragging { cursor: grabbing; }
+.product360-stage canvas[hidden], .product360-poster[hidden] { display: none !important; }
+.product360-poster { object-fit: contain; }
+.product360-badge { position: absolute; top: 1rem; left: 1rem; padding: .45rem .75rem; color: var(--navy-950); background: var(--off-white); border-radius: 999px; font-size: .8rem; font-weight: 600; pointer-events: none; }
+.product360-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .5rem; padding: 1rem; border-top: 1px solid rgba(15,33,56,.08); }
+.product360 button { min-width: 44px; min-height: 44px; padding: .5rem .8rem; background: var(--off-white); border: 1px solid rgba(15,33,56,.12); border-radius: 10px; color: var(--navy-950); font: inherit; font-size: .87rem; cursor: pointer; }
+.product360 button:hover, .product360 button[aria-pressed="true"] { background: var(--navy-950); color: #fff; }
+.product360 button:disabled { opacity: .4; cursor: default; }
+.product360 button:focus-visible, .product360 canvas:focus-visible { outline: 3px solid var(--blue-accent); outline-offset: -3px; }
+.product360-divider { height: 24px; width: 1px; background: rgba(15,33,56,.12); margin: 0 .3rem; }
+.product360 output { width: 48px; text-align: center; font-size: .85rem; font-variant-numeric: tabular-nums; }
+.product360-angle { display: flex; align-items: center; gap: 1rem; margin: 0 auto; padding: 0 1.5rem 1rem; max-width: 660px; color: var(--ink-soft); font-size: .8rem; }
+.product360-angle input { flex: 1; min-width: 60px; accent-color: var(--blue-deep); cursor: pointer; }
+.product360-views { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem; padding: 0 1rem; }
+.product360-status { text-align: center; padding: 1rem; margin: 0; color: var(--ink-soft); font-size: .83rem; }
+.product360-note { max-width: 820px; margin: 1rem auto 2.5rem; text-align: center; font-size: .85rem; color: var(--ink-soft); }
+.product360-photo-heading { margin-bottom: 1rem; }
+.product360:fullscreen { max-width: none; width: 100%; height: 100%; overflow: auto; border-radius: 0; }
+.product360:fullscreen .product360-stage { height: calc(100vh - 235px); min-height: 200px; }
+@media(max-width:480px) { .product360 { border-radius: 16px; } .product360-controls { padding: .75rem; gap: .35rem; } .product360-views button { font-size: .75rem; } }

@@ -16,6 +16,7 @@
   (function subnav() {
     var nav = document.getElementById('manualSubnav');
     if (!nav) return;
+    var rail = nav.querySelector('.manual-subnav-inner');
     var links = Array.prototype.slice.call(nav.querySelectorAll('a[data-sec]'));
     var sections = links.map(function (l) { return document.getElementById(l.getAttribute('data-sec')); }).filter(Boolean);
 
@@ -34,11 +35,15 @@
       var current = sections[0];
       sections.forEach(function (sec) { if (sec.offsetTop <= pos) current = sec; });
       links.forEach(function (l) { l.classList.toggle('active', current && l.getAttribute('data-sec') === current.id); });
-      // mantém o link ativo visível na subnav rolável
+      // Ajusta apenas o trilho horizontal. scrollIntoView também move ancestrais
+      // e fazia a página subir quando o último item saía da largura visível.
       var active = nav.querySelector('a.active');
-      if (active && active.scrollIntoView) {
-        var nr = nav.getBoundingClientRect(), ar = active.getBoundingClientRect();
-        if (ar.left < nr.left || ar.right > nr.right) active.scrollIntoView({ inline: 'center', block: 'nearest' });
+      if (active && rail) {
+        var nr = rail.getBoundingClientRect(), ar = active.getBoundingClientRect();
+        if (ar.left < nr.left || ar.right > nr.right) {
+          var left = rail.scrollLeft + ar.left - nr.left - (rail.clientWidth - ar.width) / 2;
+          rail.scrollLeft = Math.max(0, Math.min(rail.scrollWidth - rail.clientWidth, left));
+        }
       }
     }
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -168,7 +173,7 @@
     function open(svgHtml) {
       lbCanvas.innerHTML = svgHtml;
       zoom = 1;
-      var svg = lbCanvas.querySelector('svg');
+      var svg = lbCanvas.querySelector('svg, img');
       if (svg) svg.style.transform = 'scale(1)';
       lb.hidden = false;
       lb.classList.add('is-open');
@@ -176,10 +181,13 @@
     }
     function close() { lb.classList.remove('is-open'); lb.hidden = true; lbCanvas.innerHTML = ''; document.body.style.overflow = ''; }
 
+    // Começa fechado, inclusive quando o navegador conserva uma folha de estilos antiga.
+    close();
+
     document.querySelectorAll('.draw-canvas[data-zoomable], .draw-zoom-btn').forEach(function (el) {
       el.addEventListener('click', function () {
         var panel = el.closest('.draw-panel');
-        var svg = panel && panel.querySelector('.draw-canvas svg');
+        var svg = panel && panel.querySelector('.draw-canvas svg, .draw-canvas img');
         if (svg) open(svg.outerHTML);
       });
     });
@@ -188,7 +196,7 @@
     lbCanvas.addEventListener('wheel', function (e) {
       e.preventDefault();
       zoom = Math.min(4, Math.max(1, zoom + (e.deltaY < 0 ? 0.2 : -0.2)));
-      var svg = lbCanvas.querySelector('svg');
+      var svg = lbCanvas.querySelector('svg, img');
       if (svg) svg.style.transform = 'scale(' + zoom + ')';
     }, { passive: false });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) close(); });

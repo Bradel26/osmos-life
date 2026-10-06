@@ -94,6 +94,8 @@ export const MANUAIS_SVGS = {
 // Conteúdo estruturado do manual A9Plus.
 // ---------------------------------------------------------------------------
 const A9PLUS_CONTEUDO = {
+  fotoComponentes: '/assets/manuais/a9plus/vista-frontal.png',
+  fotos: [{"url": "/assets/manuais/a9plus/foto-01-studio.png", "alt": "Vista frontal: filtros PCT e RO, display e botão de energia"}, {"url": "/assets/manuais/a9plus/foto-02-studio.png", "alt": "Vista lateral com identificação 1000G"}, {"url": "/assets/manuais/a9plus/foto-03-studio.png", "alt": "Vista traseira: conexões de água e energia"}, {"url": "/assets/manuais/a9plus/foto-05-studio.png", "alt": "Vista lateral com etiqueta técnica do produto"}],
   visaoGeral: {
     texto: 'O OSMOS A9Plus é um purificador de água por osmose reversa compacto, de alto desempenho, que elimina até as menores impurezas com precisão de filtragem de 0,0001 µm. Ao ser ligado, inicia automaticamente, executa uma autolimpeza e passa a produzir água pura, exibindo o TDS em tempo real. Acompanha torneira dupla eletrônica (água da cozinha e água pura) e indicadores inteligentes de vida útil dos filtros PCT e RO.',
     caracteristicas: [
@@ -104,7 +106,7 @@ const A9PLUS_CONTEUDO = {
       { icone: 'filter', titulo: 'Indicadores de filtro', texto: 'Luzes PCT e RO avisam quando chega a hora da troca.' },
       { icone: 'shield', titulo: 'Proteção contra vazamento', texto: 'Sensor de vazamento interrompe a produção e sinaliza o código E1.' }
     ],
-    destaque: 'Água pura, segura e com a qualidade que você vê no display — em um equipamento compacto de bancada.'
+    destaque: 'Purificação por osmose reversa com acompanhamento do TDS da água pura no display.'
   },
 
   componentes: [
@@ -115,6 +117,9 @@ const A9PLUS_CONTEUDO = {
     { nome: 'Botão liga/desliga', descricao: 'Liga, força parada, reinicia após falha e executa o flush manual (pressão longa).', ponto: 'botao' },
     { nome: 'Entrada de água', descricao: 'Conexão da alimentação de água da rede (água fria) ao equipamento.', ponto: 'entrada' },
     { nome: 'Saída de água pura', descricao: 'Leva a água purificada até a torneira (bica de água pura).', ponto: 'purewater' },
+    { nome: 'Interface DC', descricao: 'Conexão elétrica da fonte de alimentação da unidade principal.', ponto: 'dc' },
+    { nome: 'Água da cozinha', descricao: 'Saída para a bica de água da cozinha da torneira dupla.', ponto: 'cozinha' },
+    { nome: 'Interface de energia da torneira', descricao: 'Conexão do cabo de energia da torneira eletrônica, entre a entrada de água e a saída residual.', ponto: 'torneira' },
     { nome: 'Saída de rejeito', descricao: 'Descarte da água de rejeito (esgoto) gerada pela osmose reversa.', ponto: 'rejeito' }
   ],
 
@@ -143,8 +148,8 @@ const A9PLUS_CONTEUDO = {
       { titulo: 'Escolha a alimentação de água', texto: 'Em pias com água quente e fria, selecione sempre a tubulação de água fria (água da rede). Posicione o equipamento em pé, na posição normal de uso.' },
       { titulo: 'Defina a posição da torneira', texto: 'Normalmente escolha um dos cantos da pia, conforme o hábito de uso (lavar louça, legumes, arroz), selecionando o canto mais utilizado.' },
       { titulo: 'Instale a torneira', texto: 'Retire o tubo PE e conecte-o diretamente ao conector rápido. Insira firmemente uma extremidade do tubo PE no conector rápido e ligue o cabo de força da torneira à interface do equipamento.' },
-      { titulo: 'Conecte a água e verifique', texto: 'Com o registro de entrada → host, e as saídas de água da cozinha, água pura e rejeito ligadas à torneira dupla, abra o registro e conecte a energia. Observe a relação água pura/rejeito (~2:1). A máquina executa um flush automático de ~1 minuto ao iniciar.' },
-      { titulo: 'Primeira utilização', texto: 'Com o indicador de energia aceso, pressione o botão "liga" por 5 segundos para iniciar o flush de 10 minutos. Líquido turvo é normal nessa etapa. Depois, abra a torneira de água pura e deixe correr por ~3 minutos antes do uso.' }
+      { titulo: 'Conecte a água e verifique', texto: 'Conecte a entrada à água fria da rede, as saídas de água pura e água da cozinha à torneira dupla e a saída de água residual ao esgoto. Conecte a interface DC e o cabo de energia da torneira nas interfaces correspondentes. Confira todas as mangueiras antes de abrir o registro e energizar. Observe a relação água pura/rejeito (~2:1). A máquina executa um flush automático de ~1 minuto ao iniciar.' },
+      { titulo: 'Primeira utilização', texto: 'Com o indicador de energia aceso, pressione o botão "liga" por 5 segundos para iniciar o flush de 10 minutos. Líquido turvo é normal nessa etapa. Ao terminar o enxágue, verifique se há vazamentos. Se estiver tudo correto, abra a torneira de água pura e deixe correr por cerca de 3 minutos antes do uso; resíduos de carvão são normais nessa etapa.' }
     ]
   },
 
@@ -160,11 +165,49 @@ const A9PLUS_CONTEUDO = {
   ],
 
   desenhos: [
-    { titulo: 'Vista frontal', vista: 'frontal', svg: 'frontal', descricao: 'Corpo, filtros PCT/RO, display de TDS, LEDs de status e botão.', arquivo_url: '' },
-    { titulo: 'Vista traseira (conexões)', vista: 'traseira', svg: 'traseira', descricao: 'DC, saída de água pura, água da cozinha, entrada de água, alimentação da torneira e saída de rejeito.', arquivo_url: '' },
-    { titulo: 'Torneira dupla eletrônica', vista: 'frontal', svg: 'torneira', descricao: 'Bicas de água da cozinha e água pura, display de TDS, LEDs PCT/RO, gota e alerta.', arquivo_url: '' },
-    { titulo: 'Diagrama hidráulico', vista: 'superior', svg: 'hidraulico', descricao: 'Registro de entrada, host e saídas (água pura, cozinha e rejeito) até a torneira.', arquivo_url: '' }
-  ],
+  {
+    "titulo": "Vista frontal",
+    "vista": "frontal",
+    "descricao": "Filtros PCT e RO, display de TDS, indicadores e botão de energia.",
+    "imagem_url": "/assets/manuais/a9plus/vista-frontal.png",
+    "arquivo_url": "/assets/manuais/a9plus/vista-frontal.png"
+  },
+  {
+    "titulo": "Vista traseira",
+    "vista": "traseira",
+    "descricao": "Interfaces elétricas e conexões hidráulicas da unidade principal.",
+    "imagem_url": "/assets/manuais/a9plus/vista-traseira.png",
+    "arquivo_url": "/assets/manuais/a9plus/vista-traseira.png"
+  },
+  {
+    "titulo": "Lateral direita",
+    "vista": "lateral",
+    "descricao": "Vista lateral direita do equipamento.",
+    "imagem_url": "/assets/manuais/a9plus/lateral-direita.png",
+    "arquivo_url": "/assets/manuais/a9plus/lateral-direita.png"
+  },
+  {
+    "titulo": "Lateral esquerda",
+    "vista": "lateral",
+    "descricao": "Vista lateral esquerda do equipamento.",
+    "imagem_url": "/assets/manuais/a9plus/lateral-esquerda.png",
+    "arquivo_url": "/assets/manuais/a9plus/lateral-esquerda.png"
+  },
+  {
+    "titulo": "Remoção dos filtros",
+    "vista": "frontal",
+    "descricao": "Use a chave, gire a tampa no sentido anti-horário e retire o elemento filtrante.",
+    "imagem_url": "/assets/manuais/a9plus/remocao-filtros.png",
+    "arquivo_url": "/assets/manuais/a9plus/remocao-filtros.png"
+  },
+  {
+    "titulo": "Guia das conexões",
+    "vista": "traseira",
+    "descricao": "DC, água pura, água da cozinha, entrada da rede e saída de água residual. A interface de energia da torneira fica entre a entrada da rede e a saída residual.",
+    "imagem_url": "/assets/manuais/a9plus/conexoes-traseiras.png",
+    "arquivo_url": "/assets/manuais/a9plus/conexoes-traseiras.png"
+  }
+],
   dimensoes: { altura: '419 mm', largura: '158 mm', profundidade: '381 mm' },
 
   uso: {
@@ -174,16 +217,19 @@ const A9PLUS_CONTEUDO = {
       'Flush por produção: a cada 30 minutos acumulados de produção, enxágua automaticamente por 30 segundos (nunca durante a produção).',
       'Proteção E2: 60 minutos de produção contínua acendem a luz vermelha com alarme e exibem "E2"; pressione o botão de energia para reiniciar.',
       'Modo economia: em standby, após 1 minuto apenas o botão de energia fica aceso; ao trabalhar, o display volta ao normal.',
+      'Enxágue manual: com os indicadores PCT e RO constantemente brancos, segure o botão de energia por 5 segundos para enxaguar por 10 minutos.',
+      'Proteção E1: ao detectar vazamento, o equipamento bloqueia a produção e o enxágue, pisca a luz vermelha e emite 3 bipes. Verifique o vazamento ou acione o SAC.',
+      'Interruptor de alta pressão: ao atingir a pressão nominal de desconexão, o circuito desliga e a membrana RO é enxaguada por 3 segundos.',
       'Standby de 24 h: após 24 horas em espera, a máquina faz um flush automático de 30 segundos.',
       'Torneira eletrônica: a gota acende em branco ao produzir água; o alerta fica vermelho em caso de falha; o display mostra o TDS sincronizado com o host.'
     ]
   },
 
   manutencao: {
-    texto: 'A troca dos filtros depende da qualidade da água local. O equipamento também monitora as horas de funcionamento e avisa pelas luzes PCT e RO.',
+    texto: 'A troca dos filtros depende da qualidade da água local. O equipamento também monitora as horas de energização e avisa pelas luzes PCT e RO.',
     periodicidade: [
-      { rotulo: 'Filtro PCT (1º estágio)', valor: '12 a 24 meses' },
-      { rotulo: 'Membrana RO (2º estágio)', valor: '12 a 48 meses' },
+      { rotulo: 'Filtro PCT (1º estágio)', valor: '8 a 12 meses' },
+      { rotulo: 'Membrana RO (2º estágio)', valor: '12 a 18 meses' },
       { rotulo: 'Aviso PCT (horas)', valor: 'Pisca em 7920 h · para em 8760 h' },
       { rotulo: 'Aviso RO (horas)', valor: 'Pisca em 16560 h · para em 17520 h' }
     ],
@@ -222,7 +268,7 @@ const A9PLUS_CONTEUDO = {
     { problema: 'Depois de cheia, a máquina liga e desliga repetidamente', causa: 'Alívio de pressão no sistema', solucao: 'Verifique a tubulação de água pura após a válvula de retenção.' },
     { problema: 'Depois de cheia, a máquina liga e desliga repetidamente', causa: 'Pré-filtro entupido', solucao: 'Substitua o elemento do pré-filtro.' },
     { problema: 'Vazão de água pura insuficiente', causa: 'Membrana RO bloqueada', solucao: 'Limpe ou substitua a membrana RO.' },
-    { problema: 'Vazão de água pura insuficiente', causa: 'Proporcionador de rejeito muito condutivo', solucao: 'Ajuste/substitua a proporção de rejeito.' },
+    { problema: 'Vazão de água pura insuficiente', causa: 'Proporcionador de rejeito muito condutivo', solucao: 'Substitua o proporcionador de água residual.' },
     { problema: 'Vazão de água pura insuficiente', causa: 'Pressão insuficiente da bomba de alta pressão', solucao: 'Meça a pressão de saída da bomba e substitua-a.' },
     { problema: 'Falha E1 (vazamento)', causa: 'Contato do sensor com água (vazamento)', solucao: 'Verifique onde há vazamento ou acione a assistência técnica.' },
     { problema: 'Falha E2 (proteção de produção prolongada)', causa: 'Produção contínua por tempo excessivo', solucao: 'Religue a máquina ou pressione o botão de enxágue duas vezes para restaurar o funcionamento.' }
@@ -233,9 +279,9 @@ const A9PLUS_CONTEUDO = {
     { categoria: 'Instalação', pergunta: 'A tampa do filtro veio frouxa, é defeito?', resposta: 'Não. É normal a tampa do filtro de uma máquina nova não vir totalmente fechada. Remova o lacre plástico dos elementos e trave a tampa com a chave que acompanha.' },
     { categoria: 'Instalação', pergunta: 'Qual a pressão de entrada necessária?', resposta: 'A pressão de entrada deve ficar entre 0,1 MPa e 0,4 MPa. Pressão muito baixa pode impedir o funcionamento.' },
     { categoria: 'Funcionamento', pergunta: 'Por que sai água turva nas primeiras utilizações?', resposta: 'É normal após a instalação ou troca de filtros. Faça o flush de 10 minutos (segure o botão por 5 s) e deixe a torneira de água pura correr por ~3 minutos.' },
-    { categoria: 'Funcionamento', pergunta: 'O que significa a relação 2:1?', resposta: 'Para cada 2 partes de água pura produzidas, cerca de 1 parte é descartada como rejeito — comportamento esperado da osmose reversa.' },
-    { categoria: 'Funcionamento', pergunta: 'O que o display mostra?', resposta: 'O display exibe apenas o TDS da água pura (efluente), sincronizado com a torneira. Quanto menor o TDS, mais pura a água.' },
-    { categoria: 'Manutenção', pergunta: 'De quanto em quanto tempo troco os filtros?', resposta: 'O filtro PCT a cada 12–24 meses e a membrana RO a cada 12–48 meses, conforme a qualidade da água. As luzes PCT e RO também avisam pelo tempo de uso.' },
+    { categoria: 'Funcionamento', pergunta: 'O que significa a relação 2:1?', resposta: 'Para cada 2 partes de água pura produzidas, cerca de 1 parte é descartada como rejeito, comportamento esperado da osmose reversa.' },
+    { categoria: 'Funcionamento', pergunta: 'O que o display mostra?', resposta: 'O display exibe apenas o TDS da água pura (efluente), sincronizado com a torneira. TDS indica os sólidos dissolvidos totais; o display não avalia sozinho todos os aspectos da qualidade da água.' },
+    { categoria: 'Manutenção', pergunta: 'De quanto em quanto tempo troco os filtros?', resposta: 'O filtro PCT a cada 8–12 meses e a membrana RO a cada 12–18 meses, conforme a qualidade da água. As luzes PCT e RO também avisam pelas horas de energização; esses alertas não substituem os ciclos recomendados de troca.' },
     { categoria: 'Manutenção', pergunta: 'Como reseto o indicador de filtro?', resposta: 'Com a luz PCT ou RO piscando, pressione e segure o botão por 6 segundos para identificar o filtro e concluir o reset. Se as duas piscarem, o reset é simultâneo.' },
     { categoria: 'Especificações', pergunta: 'Qual a vazão e a precisão de filtragem?', resposta: 'A vazão de água purificada é de 2,6 L/min e a precisão de filtragem é de 0,0001 µm.' },
     { categoria: 'Utilização', pergunta: 'Apareceu "E2" no display. O que faço?', resposta: 'E2 é a proteção de produção prolongada (60 min contínuos). Pressione o botão de energia para reiniciar, ou acione o enxágue duas vezes para restaurar.' },
@@ -243,14 +289,9 @@ const A9PLUS_CONTEUDO = {
   ],
 
   garantia: {
-    prazo: 'Conforme o termo de garantia do fabricante',
-    texto: 'As condições de garantia seguem o termo do fabricante e o rótulo do produto, que prevalece sobre estas informações. Guarde a nota fiscal e o número de série. Para acionar a garantia ou a assistência técnica especializada OSMOS, utilize o SAC.',
-    condicoes: [
-      'Garantia válida mediante apresentação da nota fiscal de compra.',
-      'Cobre defeitos de fabricação em condições normais de uso.',
-      'A troca periódica de filtros é item de manutenção e não está coberta pela garantia.',
-      'Instalação fora das especificações (pressão, temperatura, água quente) pode invalidar a garantia.'
-    ]
+    prazo: 'Consulte o termo de garantia do produto',
+    texto: 'O manual fornecido não informa prazo nem condições de garantia. Consulte o termo que acompanha o produto ou o SAC OSMOS para confirmar a cobertura e solicitar assistência.',
+    condicoes: []
   },
 
   dicas: [
@@ -266,12 +307,12 @@ const A9PLUS_CONTEUDO = {
   // ser adicionados sem reconstruir a página.
   modelo3d: {
     tipo: 'generico',
-    legenda: 'Modelo 3D ilustrativo — arraste para girar, use a rolagem para aproximar.'
+    legenda: 'Modelo 3D ilustrativo. Arraste para girar e use a rolagem para aproximar.'
   },
   hotspots: [
-    { id: 'display', nome: 'Display de TDS', x: 0, y: -0.35, z: 0.62, funcao: 'Mostra o TDS da água pura em tempo real.', uso: 'Acompanhe o valor: quanto menor, mais pura a água.', cuidado: '', especificacao: 'TDS da água pura (efluente)', linkSecao: 'uso' },
-    { id: 'pct', nome: 'Filtro PCT', x: 0, y: 0.62, z: 0.55, funcao: 'Filtro composto de 1º estágio (pré-filtragem).', uso: 'Troque a cada 12–24 meses ou quando a luz PCT avisar.', cuidado: 'Remova o lacre antes do primeiro uso.', especificacao: 'PCT composto', linkSecao: 'manutencao' },
-    { id: 'ro', nome: 'Membrana RO', x: 0, y: 0.05, z: 0.6, funcao: 'Membrana de osmose reversa de 2º estágio.', uso: 'Troque a cada 12–48 meses ou quando a luz RO avisar.', cuidado: '', especificacao: '0,0001 µm', linkSecao: 'manutencao' },
+    { id: 'display', nome: 'Display de TDS', x: 0, y: -0.35, z: 0.62, funcao: 'Mostra o TDS da água pura em tempo real.', uso: 'Acompanhe o valor de sólidos dissolvidos totais da água pura.', cuidado: '', especificacao: 'TDS da água pura (efluente)', linkSecao: 'uso' },
+    { id: 'pct', nome: 'Filtro PCT', x: 0, y: 0.62, z: 0.55, funcao: 'Filtro composto de 1º estágio (pré-filtragem).', uso: 'Troque a cada 8–12 meses ou quando a luz PCT avisar.', cuidado: 'Remova o lacre antes do primeiro uso.', especificacao: 'PCT composto', linkSecao: 'manutencao' },
+    { id: 'ro', nome: 'Membrana RO', x: 0, y: 0.05, z: 0.6, funcao: 'Membrana de osmose reversa de 2º estágio.', uso: 'Troque a cada 12–18 meses ou quando a luz RO avisar.', cuidado: '', especificacao: '0,0001 µm', linkSecao: 'manutencao' },
     { id: 'botao', nome: 'Botão liga/desliga', x: 0, y: -0.6, z: 0.55, funcao: 'Liga, força parada, reinicia após falha e executa o flush.', uso: 'Segure por 5 s para flush; 6 s para resetar filtro.', cuidado: '', especificacao: '', linkSecao: 'uso' },
     { id: 'entrada', nome: 'Entrada de água', x: 0, y: 0.1, z: -0.6, funcao: 'Conexão da alimentação de água da rede.', uso: 'Conecte à água fria, via registro de entrada.', cuidado: 'Pressão de 0,1 a 0,4 MPa.', especificacao: 'Água fria', linkSecao: 'instalacao' },
     { id: 'purewater', nome: 'Saída de água pura', x: 0.22, y: 0.35, z: -0.55, funcao: 'Leva a água purificada até a torneira.', uso: 'Conecte à bica de água pura da torneira.', cuidado: '', especificacao: '', linkSecao: 'instalacao' },
@@ -287,7 +328,8 @@ export const A9PLUS = {
   categoria: 'Purificadores por Osmose Reversa',
   keywords: 'a9plus osmose reversa purificador agua ro pct tds filtro membrana bancada compacto 2.6 l/min torneira dupla',
   descricao_curta: 'Purificador compacto de osmose reversa com precisão de 0,0001 µm, display de TDS e torneira dupla eletrônica.',
-  imagem_alt: 'Purificador de água OSMOS A9Plus',
+  imagem_url: '/assets/manuais/a9plus/foto-01-studio.png',
+  imagem_alt: 'Purificador de água OSMOS A9Plus com filtros PCT e RO',
   conteudo: A9PLUS_CONTEUDO
 };
 
@@ -302,7 +344,7 @@ export async function seedManuais(db) {
      ON CONFLICT(slug) DO NOTHING`
   ).bind(
     A9PLUS.slug, A9PLUS.nome, A9PLUS.modelo, A9PLUS.sku, A9PLUS.categoria,
-    A9PLUS.keywords, A9PLUS.descricao_curta, '', A9PLUS.imagem_alt,
+    A9PLUS.keywords, A9PLUS.descricao_curta, A9PLUS.imagem_url, A9PLUS.imagem_alt,
     JSON.stringify(A9PLUS.conteudo)
   ).run();
 }

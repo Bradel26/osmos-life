@@ -92,7 +92,7 @@ const FOOTER = `
     <div class="footer-col">
       <h4>Contato</h4>
       <ul>
-        <li><a href="/sac.html">SAC — Atendimento</a></li>
+        <li><a href="/sac.html">SAC - Atendimento</a></li>
         <li><a href="/#contato">Fale Conosco</a></li>
         <li><a href="https://wa.me/5500000000000" target="_blank" rel="noopener">WhatsApp</a></li>
         <li><a href="https://instagram.com/osmos" target="_blank" rel="noopener">Instagram</a></li>

@@ -15,10 +15,10 @@ const FEATURE_ICONS = {
 };
 
 const DICA_META = {
-  dica: { label: 'Dica', icon: '💡' },
-  atencao: { label: 'Atenção', icon: '⚠️' },
-  importante: { label: 'Importante', icon: '❗' },
-  'nao-recomendado': { label: 'Não recomendado', icon: '⛔' }
+  dica: { label: 'Dica' },
+  atencao: { label: 'Atenção' },
+  importante: { label: 'Importante' },
+  'nao-recomendado': { label: 'Não recomendado' }
 };
 
 const esc = escapeHtml;
@@ -30,6 +30,11 @@ function sectionHead(eyebrow, title, lead) {
     <h2>${esc(title)}</h2>
     ${lead ? `<p class="section-lead">${esc(lead)}</p>` : ''}
   </div>`;
+}
+
+function canExplore360(c) {
+  const files=['01','02','03','05'];
+  return c.fotos?.length === 4 && files.every((n,i)=>c.fotos[i].url === `/assets/manuais/a9plus/foto-${n}-studio.png`);
 }
 
 /* ---------- Seções ---------- */
@@ -52,6 +57,42 @@ function renderVisaoGeral(c) {
 }
 
 function render3D(c) {
+  if (c.fotos && c.fotos.length) {
+    return `<section id="explorar-3d" class="manual-section section-tint">
+      <div class="container">
+        ${sectionHead('Produto interativo', canExplore360(c) ? 'Explore o A9Plus em 360°' : 'Fotos do produto', canExplore360(c) ? 'Arraste para os lados e conheça o produto de todos os ângulos.' : 'Selecione uma foto para ampliar.')}
+        ${canExplore360(c) ? `<div class="product360" data-product360 data-base="/assets/manuais/a9plus/">
+          <div class="product360-stage">
+            <img class="product360-poster" src="${esc(c.fotos[0].url)}" alt="Vista frontal do OSMOS A9Plus" loading="lazy" decoding="async">
+            <canvas hidden tabindex="0" role="img" aria-label="Purificador A9Plus em 360 graus. Arraste para girar, use as setas do teclado para rotação, mais e menos para zoom e Home para voltar à frente."></canvas>
+            <span class="product360-badge" aria-hidden="true">360°</span>
+          </div>
+          <div class="product360-controls" role="group" aria-label="Controles de visualização">
+            <button type="button" data-360-action="left" aria-label="Girar 15 graus para a esquerda" disabled>↶</button>
+            <button type="button" data-360-action="right" aria-label="Girar 15 graus para a direita" disabled>↷</button>
+            <span class="product360-divider" aria-hidden="true"></span>
+            <button type="button" data-360-action="zoom-out" aria-label="Diminuir zoom" disabled>−</button>
+            <output data-360-zoom aria-label="Nível de zoom">100%</output>
+            <button type="button" data-360-action="zoom-in" aria-label="Aumentar zoom" disabled>+</button>
+            <button type="button" data-360-action="reset">Voltar à frente</button>
+            <button type="button" data-360-action="fullscreen" aria-label="Abrir visualizador em tela cheia">⛶</button>
+          </div>
+          <label class="product360-angle"><span>Rotação</span><input data-360-angle type="range" min="0" max="359" value="0" step="1" disabled aria-label="Ângulo de rotação" aria-valuetext="0 graus"><span>360°</span></label>
+          <div class="product360-views" role="group" aria-label="Vistas do produto">
+            <button type="button" data-360-view="0" aria-pressed="true">Frente</button>
+            <button type="button" data-360-view="90" aria-pressed="false">Lateral direita</button>
+            <button type="button" data-360-view="180" aria-pressed="false">Traseira</button>
+            <button type="button" data-360-view="270" aria-pressed="false">Lateral esquerda</button>
+          </div>
+          <p class="product360-status" data-360-status role="status">Carregando visualização interativa…</p>
+          <noscript><p class="product360-status">Ative o JavaScript para girar o produto. As fotografias estão disponíveis abaixo.</p></noscript>
+        </div>
+        <p class="product360-note">Reconstrução visual aproximada a partir de quatro fotografias. Para conferir conexões, rótulos e detalhes técnicos, consulte as fotos e os desenhos abaixo.</p>` : ''}
+        <h3 class="product360-photo-heading">Fotografias de referência</h3>
+        <div class="manual-photo-grid">${c.fotos.map((f) => `<figure class="draw-panel active"><button type="button" class="manual-photo-button draw-canvas" data-zoomable aria-label="Ampliar ${esc(f.alt)}"><img src="${esc(f.url)}" alt="${esc(f.alt)}" loading="lazy" decoding="async"></button><figcaption>${esc(f.alt)}</figcaption></figure>`).join('')}</div>
+      </div>
+    </section>`;
+  }
   const cfg = c.modelo3d || {};
   const hotspots = c.hotspots || [];
   const legend = hotspots.map((h) => `<li><span class="dot" aria-hidden="true"></span>${esc(h.nome)}</li>`).join('');
@@ -80,20 +121,22 @@ function render3D(c) {
 }
 
 function renderComponentes(c) {
-  const comps = (c.componentes || []).map((k, i) => `
-    <div class="component-item" data-ponto="${esc(k.ponto || '')}">
-      <span class="component-num">${i + 1}</span>
+  const components = c.componentes || [];
+  const split = Math.ceil(components.length / 2);
+  const column = (items, start) => `<ol class="component-list" start="${start + 1}">${items.map((k, i) => `
+    <li class="component-item" data-ponto="${esc(k.ponto || '')}">
+      <span class="component-num" aria-hidden="true">${start + i + 1}</span>
       <div>
         <h3>${esc(k.nome)}</h3>
         <p>${esc(k.descricao)}</p>
       </div>
-    </div>`).join('');
+    </li>`).join('')}</ol>`;
   return `<section id="conheca" class="manual-section section-tint">
     <div class="container">
-      ${sectionHead('Conheça seu produto', 'Principais componentes', 'Identifique visualmente as partes do equipamento e suas funções.')}
+      ${sectionHead('Conheça seu produto', 'Principais componentes', 'Conheça as partes do equipamento e suas funções.')}
       <div class="component-layout">
-        <div class="component-figure" aria-hidden="true">${MANUAIS_SVGS.frontal}</div>
-        <div class="component-list">${comps}</div>
+        ${column(components.slice(0, split), 0)}
+        ${column(components.slice(split), split)}
       </div>
     </div>
   </section>`;
@@ -112,7 +155,7 @@ function renderInstalacao(c) {
   const dicas = (c.dicas || []).map((d) => {
     const m = DICA_META[d.tipo] || DICA_META.dica;
     return `<div class="callout callout--${esc(d.tipo || 'dica')}">
-      <span class="callout-tag"><span aria-hidden="true">${m.icon}</span> ${esc(m.label)}</span>
+      <span class="callout-tag">${esc(m.label)}</span>
       <h4>${esc(d.titulo)}</h4>
       <p>${esc(d.texto)}</p>
     </div>`;
@@ -167,7 +210,7 @@ function renderDesenhos(c) {
   const dim = c.dimensoes || {};
   const tabs = des.map((d, i) => `<button type="button" class="draw-tab${i === 0 ? ' active' : ''}" data-draw="${i}">${esc(d.titulo)}</button>`).join('');
   const panels = des.map((d, i) => {
-    const svg = MANUAIS_SVGS[d.svg] || '';
+    const svg = d.imagem_url ? `<img src="${esc(d.imagem_url)}" alt="${esc(d.titulo + ' — ' + (d.descricao || ''))}" loading="lazy" decoding="async">` : (MANUAIS_SVGS[d.svg] || '');
     const dl = d.arquivo_url ? `<a class="btn btn-outline-dark draw-download" href="${esc(d.arquivo_url)}" download>Baixar arquivo original</a>` : '';
     return `<figure class="draw-panel${i === 0 ? ' active' : ''}" data-draw-panel="${i}" data-vista="${esc(d.vista || '')}">
       <div class="draw-canvas" data-zoomable>${svg}</div>
@@ -225,7 +268,7 @@ function renderManutencao(c) {
       </div>
       <h3 class="mt">Passo a passo da troca</h3>
       <ol class="ordered-steps">${passos}</ol>
-      ${m.reset ? `<div class="callout callout--dica"><span class="callout-tag"><span aria-hidden="true">💡</span> Reset do filtro</span><p>${esc(m.reset)}</p></div>` : ''}
+      ${m.reset ? `<div class="callout callout--dica"><span class="callout-tag">Reset do filtro</span><p>${esc(m.reset)}</p></div>` : ''}
     </div>
   </section>`;
 }
@@ -362,7 +405,7 @@ export async function onRequestGet({ env, params }) {
   let c = {};
   try { c = JSON.parse(prod.conteudo_json || '{}'); } catch (e) { c = {}; }
 
-  const navChips = NAV.map(([id, label]) => `<a href="#${id}" data-sec="${id}">${esc(label)}</a>`).join('');
+  const navChips = NAV.map(([id, label]) => { if (id === 'explorar-3d' && c.fotos?.length) label = canExplore360(c) ? 'Explorar em 360°' : 'Fotos do produto'; return `<a href="#${id}" data-sec="${id}">${esc(label)}</a>`; }).join('');
 
   const bodyHtml = `
   <section class="manual-top">
@@ -383,7 +426,7 @@ export async function onRequestGet({ env, params }) {
             <div class="smart-results" id="smartResults" hidden></div>
           </div>
         </div>
-        <div class="manual-top-art" aria-hidden="true">${MANUAIS_SVGS.frontal}</div>
+        <div class="manual-top-art">${prod.imagem_url ? `<img src="${esc(prod.imagem_url)}" alt="${esc(prod.imagem_alt || prod.nome)}" fetchpriority="high">` : MANUAIS_SVGS.frontal}</div>
       </div>
     </div>
     <nav class="manual-subnav" id="manualSubnav" aria-label="Seções do manual">
@@ -433,8 +476,8 @@ export async function onRequestGet({ env, params }) {
     ogImage: prod.imagem_url || '',
     jsonLd: faqLd,
     bodyHtml,
-    extraHead: '\n<style>:root{scroll-padding-top:150px}</style>',
-    bodyEndScripts: '<script src="/js/manual.js?v=20261006-lightbox" defer></script>'
+    extraHead: '\n<style>:root{scroll-padding-top:150px}.draw-lightbox[hidden]{display:none!important}</style>',
+    bodyEndScripts: '<script src="/js/manual.js?v=20261006-lightbox" defer></script><script type="module" src="/js/product360.js?v=20261002-1"></script>'
   });
 
   return new Response(html, {

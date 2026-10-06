@@ -81,7 +81,7 @@
     faq: [{ categoria: 'Instalação', pergunta: 'Pergunta?', resposta: 'Resposta.' }],
     garantia: { prazo: 'Conforme termo do fabricante', texto: 'Condições de garantia.', condicoes: ['Condição de garantia.'] },
     dicas: [{ tipo: 'dica', titulo: 'Título', texto: 'Texto da dica.' }],
-    modelo3d: { tipo: 'generico', legenda: 'Modelo 3D ilustrativo — arraste para girar.' },
+    modelo3d: { tipo: 'generico', legenda: 'Modelo 3D ilustrativo. Arraste para girar.' },
     hotspots: [
       { id: 'ponto1', nome: 'Nome do ponto', x: 0, y: 0, z: 0.6, funcao: 'Função.', uso: '', cuidado: '', especificacao: '', linkSecao: 'instalacao' }
     ]
