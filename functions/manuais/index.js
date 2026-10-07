@@ -17,13 +17,17 @@ function cardMedia(prod) {
 
 function renderCard(prod) {
   const sku = prod.sku ? `<span class="manual-card-sku">${escapeHtml(prod.sku)}</span>` : '';
-  return `<article class="manual-card fade-up"
+  // O card inteiro é um único elemento de navegação (<a>): toda a área —
+  // imagem, tag, código, título, descrição, espaços e botão — é clicável,
+  // sem links sobrepostos. Acessível por teclado (âncora focável).
+  return `<a class="manual-card fade-up"
+      href="/manuais/${escapeHtml(prod.slug)}"
+      aria-label="Acessar manual de ${escapeHtml(prod.nome)}"
       data-nome="${escapeHtml((prod.nome || '').toLowerCase())}"
       data-modelo="${escapeHtml((prod.modelo || '').toLowerCase())}"
       data-sku="${escapeHtml((prod.sku || '').toLowerCase())}"
       data-categoria="${escapeHtml(prod.categoria || '')}"
       data-keywords="${escapeHtml((prod.keywords || '').toLowerCase())}">
-    <a class="manual-card-link-cover" href="/manuais/${escapeHtml(prod.slug)}" aria-label="Acessar manual de ${escapeHtml(prod.nome)}"></a>
     ${cardMedia(prod)}
     <div class="manual-card-body">
       <div class="manual-card-meta">
@@ -34,7 +38,7 @@ function renderCard(prod) {
       <p class="manual-card-desc">${escapeHtml(prod.descricao_curta || '')}</p>
       <span class="btn btn-primary manual-card-cta">Acessar manual interativo <span aria-hidden="true">→</span></span>
     </div>
-  </article>`;
+  </a>`;
 }
 
 export async function onRequestGet({ env }) {
