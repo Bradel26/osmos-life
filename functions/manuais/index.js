@@ -2,7 +2,8 @@
 // Renderizada no servidor (HTML real) para indexação. O arquivo
 // js/manuais-index.js adiciona busca e filtros no cliente.
 import { ensureManuaisSchema } from '../_lib/db.js';
-import { seedManuais, MANUAIS_SVGS } from '../_lib/manuais-data.js';
+import { seedManuais } from '../_lib/manuais-data.js';
+import { MANUAIS_SVGS } from '../_lib/manuais-estrutura.js';
 import { renderDocument, escapeHtml, SITE_URL } from '../_lib/manuais-render.js';
 
 function cardMedia(prod) {

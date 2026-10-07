@@ -44,46 +44,59 @@
 
   if (!els.form) return; // aba não presente
 
-  // Modelo de exemplo (esqueleto completo) para novos produtos.
+  // Esqueleto VAZIO (estrutura reutilizável) para um PRODUTO NOVO.
+  // Regra: cada produto tem como fonte de verdade apenas o SEU próprio manual.
+  // Os campos vêm preenchidos com "A definir" / "Informação não fornecida" de
+  // propósito — NUNCA copie dados técnicos de outro modelo (ex.: A9 PLUS) para
+  // completar lacunas. Preencha só com o que constar no manual deste produto.
+  var PENDENTE = 'A definir';
+  var SEM_INFO = 'Informação não fornecida';
   var TEMPLATE = {
     visaoGeral: {
-      texto: 'Descrição geral do produto, finalidade e principais características.',
+      texto: SEM_INFO,
       caracteristicas: [
-        { icone: 'drop', titulo: 'Característica 1', texto: 'Explicação breve.' },
-        { icone: 'filter', titulo: 'Característica 2', texto: 'Explicação breve.' }
+        { icone: 'drop', titulo: PENDENTE, texto: SEM_INFO }
       ],
-      destaque: 'Frase de destaque do produto.'
+      destaque: ''
     },
     componentes: [
-      { nome: 'Componente', descricao: 'Função do componente.', ponto: '' }
+      { nome: PENDENTE, descricao: SEM_INFO, ponto: '' }
     ],
     antesDeInstalar: {
-      checklist: ['Item do checklist de preparação.'],
-      ferramentas: ['Ferramenta necessária.'],
-      requisitos: [{ rotulo: 'Pressão de entrada', valor: '0,1 a 0,4 MPa' }],
-      cuidados: ['Cuidado importante.']
+      checklist: [PENDENTE],
+      ferramentas: [PENDENTE],
+      requisitos: [{ rotulo: PENDENTE, valor: SEM_INFO }],
+      cuidados: [PENDENTE]
     },
-    instalacao: { passos: [{ titulo: 'Passo 1', texto: 'Descrição do passo.' }] },
-    especificacoes: [{ rotulo: 'Modelo', valor: '' }],
+    instalacao: { passos: [{ titulo: PENDENTE, texto: SEM_INFO }] },
+    especificacoes: [{ rotulo: 'Modelo', valor: PENDENTE }],
     desenhos: [
-      { titulo: 'Vista frontal', vista: 'frontal', svg: 'frontal', descricao: '', arquivo_url: '' }
+      { titulo: PENDENTE, vista: 'frontal', svg: 'frontal', descricao: '', imagem_url: '', arquivo_url: '' }
     ],
     dimensoes: { altura: '', largura: '', profundidade: '' },
-    uso: { texto: 'Como utilizar.', topicos: ['Orientação de uso.'] },
+    // Galeria de fotos do produto. Use a PASTA PRÓPRIA deste produto:
+    // /assets/manuais/<modelo>/...  (nunca a pasta de outro modelo).
+    fotos: [],
+    // 360° opcional: só preencha quando houver as fotos de estúdio PRÓPRIAS
+    // deste produto (frente, lateral dir., traseira, lateral esq.) e o perfil de
+    // reconstrução correspondente. Deixe "base" vazio para manter apenas a
+    // galeria de fotos, sem giro 360°.
+    explorar360: { base: '', views: [] },
+    uso: { texto: SEM_INFO, topicos: [PENDENTE] },
     manutencao: {
-      texto: 'Orientações de manutenção.',
-      periodicidade: [{ rotulo: 'Filtro', valor: '12 a 24 meses' }],
-      quandoTrocar: ['Sinal de troca.'],
-      passos: ['Passo da troca.'],
-      reset: 'Como resetar o indicador de filtro.'
+      texto: SEM_INFO,
+      periodicidade: [{ rotulo: PENDENTE, valor: SEM_INFO }],
+      quandoTrocar: [PENDENTE],
+      passos: [PENDENTE],
+      reset: SEM_INFO
     },
-    troubleshooting: [{ problema: 'Sintoma', causa: 'Possível causa', solucao: 'O que fazer' }],
-    faq: [{ categoria: 'Instalação', pergunta: 'Pergunta?', resposta: 'Resposta.' }],
-    garantia: { prazo: 'Conforme termo do fabricante', texto: 'Condições de garantia.', condicoes: ['Condição de garantia.'] },
-    dicas: [{ tipo: 'dica', titulo: 'Título', texto: 'Texto da dica.' }],
+    troubleshooting: [{ problema: PENDENTE, causa: SEM_INFO, solucao: SEM_INFO }],
+    faq: [{ categoria: PENDENTE, pergunta: PENDENTE, resposta: SEM_INFO }],
+    garantia: { prazo: PENDENTE, texto: SEM_INFO, condicoes: [] },
+    dicas: [{ tipo: 'dica', titulo: PENDENTE, texto: SEM_INFO }],
     modelo3d: { tipo: 'generico', legenda: 'Modelo 3D ilustrativo. Arraste para girar.' },
     hotspots: [
-      { id: 'ponto1', nome: 'Nome do ponto', x: 0, y: 0, z: 0.6, funcao: 'Função.', uso: '', cuidado: '', especificacao: '', linkSecao: 'instalacao' }
+      { id: 'ponto1', nome: PENDENTE, x: 0, y: 0, z: 0.6, funcao: SEM_INFO, uso: '', cuidado: '', especificacao: '', linkSecao: 'instalacao' }
     ]
   };
 

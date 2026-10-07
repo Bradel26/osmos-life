@@ -2,7 +2,8 @@
 // Renderizado no servidor (HTML real, indexável). A interatividade (navegação,
 // busca, filtros, zoom nos desenhos, viewer 3D e hotspots) vem de /js/manual.js.
 import { ensureManuaisSchema } from '../_lib/db.js';
-import { seedManuais, MANUAIS_SVGS } from '../_lib/manuais-data.js';
+import { seedManuais } from '../_lib/manuais-data.js';
+import { MANUAIS_SVGS } from '../_lib/manuais-estrutura.js';
 import { renderDocument, escapeHtml, SITE_URL } from '../_lib/manuais-render.js';
 
 const FEATURE_ICONS = {
@@ -32,10 +33,29 @@ function sectionHead(eyebrow, title, lead) {
   </div>`;
 }
 
-function canExplore360(c) {
-  const files=['01','02','03','05'];
-  return c.fotos?.length === 4 && files.every((n,i)=>c.fotos[i].url === `/assets/manuais/a9plus/foto-${n}-studio.png`);
+// A reconstrução 360° é um recurso ESTRUTURAL, mas depende de o PRODUTO fornecer
+// as quatro fotos de estúdio ortogonais (frente, laterais, traseira). O caminho
+// base é DERIVADO das próprias fotos do produto — nada aqui é fixado a um modelo
+// específico. Cada produto usa a sua pasta /assets/manuais/<modelo>/. Enquanto um
+// produto não tiver essas fotos próprias, a central mostra apenas a galeria de
+// fotos (sem 360°) — nunca reaproveita as fotos de outro modelo.
+const STUDIO_360_FILES = ['foto-01-studio.png', 'foto-02-studio.png', 'foto-03-studio.png', 'foto-05-studio.png'];
+
+function studio360Base(c) {
+  if (c.explorar360 && c.explorar360.base) return c.explorar360.base;
+  const fotos = c.fotos || [];
+  if (fotos.length !== 4) return null;
+  let base = null;
+  for (const name of STUDIO_360_FILES) {
+    const foto = fotos.find((f) => (f.url || '').endsWith('/' + name));
+    if (!foto) return null;
+    const b = foto.url.slice(0, foto.url.length - name.length);
+    if (base === null) base = b; else if (b !== base) return null;
+  }
+  return base;
 }
+
+function canExplore360(c) { return studio360Base(c) !== null; }
 
 /* ---------- Seções ---------- */
 function renderVisaoGeral(c) {
@@ -56,15 +76,20 @@ function renderVisaoGeral(c) {
   </section>`;
 }
 
-function render3D(c) {
+function render3D(c, prod) {
+  prod = prod || {};
   if (c.fotos && c.fotos.length) {
+    const base360 = studio360Base(c);
+    const can360 = base360 !== null;
+    const label = prod.modelo || prod.nome || 'produto';
+    const nome = prod.nome || label;
     return `<section id="explorar-3d" class="manual-section section-tint">
       <div class="container">
-        ${sectionHead('Produto interativo', canExplore360(c) ? 'Explore o A9Plus em 360°' : 'Fotos do produto', canExplore360(c) ? 'Arraste para os lados e conheça o produto de todos os ângulos.' : 'Selecione uma foto para ampliar.')}
-        ${canExplore360(c) ? `<div class="product360" data-product360 data-base="/assets/manuais/a9plus/">
+        ${sectionHead('Produto interativo', can360 ? `Explore o ${label} em 360°` : 'Fotos do produto', can360 ? 'Arraste para os lados e conheça o produto de todos os ângulos.' : 'Selecione uma foto para ampliar.')}
+        ${can360 ? `<div class="product360" data-product360 data-base="${esc(base360)}" data-produto="${esc(label)}">
           <div class="product360-stage">
-            <img class="product360-poster" src="${esc(c.fotos[0].url)}" alt="Vista frontal do OSMOS A9Plus" loading="lazy" decoding="async">
-            <canvas hidden tabindex="0" role="img" aria-label="Purificador A9Plus em 360 graus. Arraste para girar, use as setas do teclado para rotação, mais e menos para zoom e Home para voltar à frente."></canvas>
+            <img class="product360-poster" src="${esc(c.fotos[0].url)}" alt="Vista frontal do ${esc(nome)}" loading="lazy" decoding="async">
+            <canvas hidden tabindex="0" role="img" aria-label="${esc(nome)} em 360 graus. Arraste para girar, use as setas do teclado para rotação, mais e menos para zoom e Home para voltar à frente."></canvas>
             <span class="product360-badge" aria-hidden="true">360°</span>
           </div>
           <div class="product360-controls" role="group" aria-label="Controles de visualização">
@@ -435,7 +460,7 @@ export async function onRequestGet({ env, params }) {
   </section>
 
   ${renderVisaoGeral(c)}
-  ${render3D(c)}
+  ${render3D(c, prod)}
   ${renderComponentes(c)}
   ${renderInstalacao(c)}
   ${renderAntes(c)}
