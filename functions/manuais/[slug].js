@@ -500,6 +500,7 @@ export async function onRequestGet({ env, params }) {
     canonicalPath: `/manuais/${prod.slug}`,
     ogImage: prod.imagem_url || '',
     jsonLd: faqLd,
+    bodyClass: 'manual-detail-page',
     bodyHtml,
     extraHead: '\n<style>:root{scroll-padding-top:150px}.draw-lightbox[hidden]{display:none!important}</style>',
     bodyEndScripts: '<script src="/js/manual.js?v=20261006-lightbox" defer></script><script type="module" src="/js/product360.js?v=20261002-1"></script>'

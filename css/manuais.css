@@ -110,6 +110,22 @@
 /* ============================================
    Página do manual interativo
    ============================================ */
+
+/* A página de manual começa com fundo claro (sem hero escuro), então o header
+   fixo — que por padrão usa texto branco para o hero da home — precisa já nascer
+   no estado "sólido" (texto escuro). Sem isso o menu branco some sobre o claro. */
+.manual-detail-page .site-header:not(.scrolled) {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 1px 0 rgba(15,33,56,0.06);
+}
+.manual-detail-page .site-header:not(.scrolled) .main-nav a,
+.manual-detail-page .site-header:not(.scrolled) .logo-text,
+.manual-detail-page .site-header:not(.scrolled) .btn-ghost { color: var(--navy-900); }
+.manual-detail-page .site-header:not(.scrolled) .nav-toggle { color: var(--navy-950); }
+.manual-detail-page .site-header:not(.scrolled) .logo-img { filter: none; }
+.manual-detail-page .site-header:not(.scrolled) .main-nav a.active { color: var(--blue-accent); }
+
 .manual-top {
   padding-top: calc(var(--header-h) + clamp(1.5rem, 4vw, 3rem));
   background: linear-gradient(180deg, var(--off-white), var(--white));
@@ -146,9 +162,10 @@
   background: rgba(255,255,255,0.9); backdrop-filter: blur(14px) saturate(160%);
   border-top: 1px solid rgba(15,33,56,0.06); border-bottom: 1px solid rgba(15,33,56,0.08);
 }
-.manual-subnav-inner { display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; padding-top: 0.6rem; padding-bottom: 0.6rem; }
+.manual-subnav-inner { display: flex; flex-wrap: wrap; gap: 0.4rem 0.5rem; padding-top: 0.6rem; padding-bottom: 0.6rem; }
 .manual-subnav-inner::-webkit-scrollbar { display: none; }
 .manual-subnav a {
+  flex: 0 0 auto;
   white-space: nowrap; font-size: 0.85rem; font-weight: 500; color: var(--ink-soft);
   padding: 0.5rem 0.9rem; border-radius: 999px; transition: all var(--dur-fast);
 }
@@ -389,6 +406,17 @@
   .draw-panel { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
+  /* Em telas estreitas, 13 chips empilhados ficariam altos demais para uma
+     barra fixa — mantém uma única linha rolável com indicador de desvanecer. */
+  .manual-subnav-inner {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+    scroll-padding-inline: 1.5rem; -webkit-overflow-scrolling: touch;
+  }
+  .manual-subnav::after {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 2.75rem;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.92));
+  }
   .manual-finder-bar { grid-template-columns: 1fr; }
   .manual-filter select { width: 100%; }
   .manual-grid { grid-template-columns: 1fr; }

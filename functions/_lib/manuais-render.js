@@ -150,7 +150,7 @@ const INLINE_SCRIPT = `
 </script>`;
 
 // Monta um documento HTML completo da Central de Manuais.
-export function renderDocument({ title, description, canonicalPath, ogImage, jsonLd, bodyHtml, bodyEndScripts, extraHead }) {
+export function renderDocument({ title, description, canonicalPath, ogImage, jsonLd, bodyHtml, bodyEndScripts, extraHead, bodyClass }) {
   const canonical = `${SITE_URL}${canonicalPath || '/manuais'}`;
   const desc = escapeHtml(description || 'Central de Manuais e Suporte Técnico OSMOS: manuais interativos, instalação, especificações, desenhos técnicos, garantia e mais.');
   const img = absoluteImage(ogImage);
@@ -180,9 +180,9 @@ export function renderDocument({ title, description, canonicalPath, ogImage, jso
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css">
-<link rel="stylesheet" href="/css/manuais.css?v=20261006-lightbox">${extraHead || ''}${ld}
+<link rel="stylesheet" href="/css/manuais.css?v=20261007-nav-contrast">${extraHead || ''}${ld}
 </head>
-<body>
+<body${bodyClass ? ` class="${bodyClass}"` : ''}>
 ${HEADER}
 <main id="main">
 ${bodyHtml}
