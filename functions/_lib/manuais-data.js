@@ -4,6 +4,13 @@
 // não existir (ON CONFLICT DO NOTHING), de modo que edições feitas no painel
 // admin nunca sejam sobrescritas em novos deploys.
 
+// Outros produtos independentes da Central de Manuais. Cada um tem a sua própria
+// fonte de verdade (o seu manual) e a sua própria função de seed; são apenas
+// encadeados no ponto de entrada único (seedManuais). Nenhum dado é
+// compartilhado entre modelos.
+import { A10S, seedA10S } from './manuais-data-a10s.js';
+export { A10S, seedA10S };
+
 // ---------------------------------------------------------------------------
 // Ilustrações técnicas (SVG, traço — mesmo estilo do manual do fabricante).
 // Usam currentColor para herdar a cor do contexto (claro/escuro).
@@ -335,6 +342,13 @@ export const A9PLUS = {
 
 // Seed idempotente: só insere se o slug ainda não existir.
 export async function seedManuais(db) {
+  await seedA9Plus(db);
+  // Demais produtos independentes (cada um com a sua própria linha/semente).
+  await seedA10S(db);
+}
+
+// Seed específico do A9Plus — só insere se o slug ainda não existir.
+async function seedA9Plus(db) {
   const row = await db.prepare('SELECT id FROM produtos_manual WHERE slug = ?').bind(A9PLUS.slug).first();
   if (row) return;
   await db.prepare(
