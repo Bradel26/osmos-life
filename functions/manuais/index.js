@@ -72,7 +72,7 @@ export async function onRequestGet({ env }) {
       <div class="section-head">
         <p class="eyebrow">Encontre seu produto</p>
         <h2>Localize seu manual</h2>
-        <p class="section-lead">Pesquise por nome, modelo, código ou palavras relacionadas — ou filtre por categoria e modelo.</p>
+        <p class="section-lead">Pesquise por nome, modelo, código ou palavras relacionadas, ou filtre por categoria e modelo.</p>
       </div>
 
       <form class="manual-finder-bar" id="manualFinder" role="search" autocomplete="off" onsubmit="return false">
@@ -106,7 +106,7 @@ export async function onRequestGet({ env }) {
         <div>
           <p class="eyebrow">Não encontrou o que precisava?</p>
           <h2>O SAC OSMOS pode ajudar</h2>
-          <p class="section-lead">Para situações que o manual não resolve — suporte técnico, garantia, trocas e instalação — fale com a nossa equipe.</p>
+          <p class="section-lead">Para situações que o manual não resolve, como suporte técnico, garantia, trocas e instalação, fale com a nossa equipe.</p>
         </div>
         <a href="/sac.html" class="btn btn-primary">Falar com o SAC</a>
       </div>

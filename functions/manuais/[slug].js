@@ -111,7 +111,7 @@ function render3D(c) {
         <div class="viewer3d-toolbar">
           <button type="button" class="viewer3d-btn" id="viewer3dReset" title="Posição inicial" aria-label="Voltar à posição inicial">⟲</button>
           <button type="button" class="viewer3d-btn" id="viewer3dFull" title="Tela cheia" aria-label="Tela cheia">⛶</button>
-          <button type="button" class="viewer3d-btn viewer3d-btn--soon" id="viewer3dExplode" title="Vista explodida — em breve" aria-label="Vista explodida (em breve)" disabled>Explodir <span class="soon-tag">em breve</span></button>
+          <button type="button" class="viewer3d-btn viewer3d-btn--soon" id="viewer3dExplode" title="Vista explodida (em breve)" aria-label="Vista explodida (em breve)" disabled>Explodir <span class="soon-tag">em breve</span></button>
         </div>
       </div>
       <ul class="viewer3d-legend">${legend}</ul>
@@ -210,7 +210,7 @@ function renderDesenhos(c) {
   const dim = c.dimensoes || {};
   const tabs = des.map((d, i) => `<button type="button" class="draw-tab${i === 0 ? ' active' : ''}" data-draw="${i}">${esc(d.titulo)}</button>`).join('');
   const panels = des.map((d, i) => {
-    const svg = d.imagem_url ? `<img src="${esc(d.imagem_url)}" alt="${esc(d.titulo + ' — ' + (d.descricao || ''))}" loading="lazy" decoding="async">` : (MANUAIS_SVGS[d.svg] || '');
+    const svg = d.imagem_url ? `<img src="${esc(d.imagem_url)}" alt="${esc(d.titulo + (d.descricao ? ': ' + d.descricao : ''))}" loading="lazy" decoding="async">` : (MANUAIS_SVGS[d.svg] || '');
     const dl = d.arquivo_url ? `<a class="btn btn-outline-dark draw-download" href="${esc(d.arquivo_url)}" download>Baixar arquivo original</a>` : '';
     return `<figure class="draw-panel${i === 0 ? ' active' : ''}" data-draw-panel="${i}" data-vista="${esc(d.vista || '')}">
       <div class="draw-canvas" data-zoomable>${svg}</div>
