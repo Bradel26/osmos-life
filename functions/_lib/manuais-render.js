@@ -26,7 +26,7 @@ export function slugify(text) {
 }
 
 function absoluteImage(url) {
-  if (!url) return `${SITE_URL}/assets/img/osmos-produto-logo.png`;
+  if (!url) return `${SITE_URL}/assets/img/marca/osmos-produto-logo.png`;
   if (/^https?:\/\//i.test(url)) return url;
   return `${SITE_URL}/${String(url).replace(/^\//, '')}`;
 }
@@ -36,7 +36,7 @@ const HEADER = `
 <header class="site-header" id="site-header">
   <div class="container header-inner">
     <a href="/" class="logo" aria-label="OSMOS - Página inicial">
-      <img src="/assets/img/osmos-logo.png" alt="OSMOS" class="logo-img" width="624" height="280">
+      <img src="/assets/img/marca/osmos-logo.png" alt="OSMOS" class="logo-img" width="624" height="280">
     </a>
     <nav class="main-nav" aria-label="Navegação principal">
       <ul>
@@ -72,7 +72,7 @@ const FOOTER = `
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <img src="/assets/img/osmos-logo.png" alt="OSMOS" class="logo-img footer-logo" width="624" height="280">
+      <img src="/assets/img/marca/osmos-logo.png" alt="OSMOS" class="logo-img footer-logo" width="624" height="280">
       <p>Especialista em soluções de filtragem e purificação de água por Osmose Reversa.</p>
       <ul class="footer-col footer-brand-links">
         <li><a href="/quiz.html">Diagnóstico de Perfil do Cliente</a></li>
@@ -175,7 +175,7 @@ export function renderDocument({ title, description, canonicalPath, ogImage, jso
 <meta name="twitter:title" content="${escapeHtml(title)}">
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${escapeHtml(img)}">
-<link rel="icon" href="/assets/img/osmos-logo.png">
+<link rel="icon" href="/assets/img/marca/osmos-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

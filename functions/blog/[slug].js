@@ -79,7 +79,7 @@ export async function onRequestGet({ request, env, params }) {
     publisher: {
       '@type': 'Organization',
       name: 'OSMOS',
-      logo: { '@type': 'ImageObject', url: `${SITE_URL}/assets/img/osmos-produto-logo.png` }
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/assets/img/marca/osmos-produto-logo.png` }
     },
     mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`
   };
