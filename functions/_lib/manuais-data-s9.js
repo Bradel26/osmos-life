@@ -248,10 +248,9 @@ export const S9 = {
   categoria: 'Purificadores por Osmose Reversa',
   keywords: 's9 osmose reversa purificador agua ro cbpa tds filtro membrana cartucho ponto de uso 0,0001 micrometro 1,83 l/min agua pura agua residual',
   descricao_curta: 'Purificador de ponto de uso por osmose reversa (0,0001 µm) em dois estágios — cartucho CBPA e membrana RO — com vazão declarada de 1,83 L/min e leitura de TDS.',
-  // Sem imagem de card própria ainda — fica vazio para a estrutura usar a arte
-  // genérica de fallback (sem imagem quebrada). Preencher com /assets/manuais/s9/card.jpg.
-  imagem_url: '',
-  imagem_alt: 'Purificador de água OSMOS S9',
+  // Imagem de capa do produto (card do índice, topo da página e OG).
+  imagem_url: '/assets/manuais/s9/card.jpg',
+  imagem_alt: 'Purificador de água OSMOS S9 em vista diagonal, com os cartuchos CBPA (superior) e RO (inferior), display de TDS e botão de energia',
   conteudo: S9_CONTEUDO
 };
 
