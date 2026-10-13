@@ -5,6 +5,7 @@ import { ensureManuaisSchema } from '../_lib/db.js';
 import { seedManuais } from '../_lib/manuais-data.js';
 import { MANUAIS_SVGS } from '../_lib/manuais-estrutura.js';
 import { renderDocument, escapeHtml, SITE_URL } from '../_lib/manuais-render.js';
+import { renderS9Viewer } from '../_lib/manuais-s9-viewer.js';
 
 const FEATURE_ICONS = {
   drop: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3s6 6.5 6 11a6 6 0 11-12 0c0-4.5 6-11 6-11z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
@@ -114,6 +115,7 @@ function renderVisaoGeral(c) {
 
 function render3D(c, prod) {
   prod = prod || {};
+  if (prod.slug === 'purificador-osmos-s9') return renderS9Viewer(prod);
   if (c.fotos && c.fotos.length) {
     const cfg = viewer360Config(c);
     const can360 = cfg !== null;
@@ -473,7 +475,8 @@ export async function onRequestGet({ env, params }) {
   let c = {};
   try { c = JSON.parse(prod.conteudo_json || '{}'); } catch (e) { c = {}; }
 
-  const navChips = NAV.map(([id, label]) => { if (id === 'explorar-3d' && c.fotos?.length) label = canExplore360(c) ? 'Explorar em 360°' : 'Fotos do produto'; return `<a href="#${id}" data-sec="${id}">${esc(label)}</a>`; }).join('');
+  const isS9 = prod.slug === 'purificador-osmos-s9';
+  const navChips = NAV.map(([id, label]) => { if (id === 'explorar-3d' && !isS9 && c.fotos?.length) label = canExplore360(c) ? 'Explorar em 360°' : 'Fotos do produto'; return `<a href="#${id}" data-sec="${id}">${esc(label)}</a>`; }).join('');
 
   const bodyHtml = `
   <section class="manual-top">
@@ -545,8 +548,8 @@ export async function onRequestGet({ env, params }) {
     jsonLd: faqLd,
     bodyClass: 'manual-detail-page',
     bodyHtml,
-    extraHead: '\n<style>:root{scroll-padding-top:150px}.draw-lightbox[hidden]{display:none!important}</style>',
-    bodyEndScripts: '<script src="/js/manual.js?v=20261006-lightbox" defer></script><script type="module" src="/js/product360.js?v=20261007-a10s-calibrated"></script>'
+    extraHead: '\n<style>:root{scroll-padding-top:150px}.draw-lightbox[hidden]{display:none!important}</style>' + (isS9 ? '\n<link rel="stylesheet" href="/css/s9-3d.css?v=20261013-s9"><script type="importmap">{"imports":{"three":"/assets/vendor/three-0.180.0/three.module.js"}}</script>' : ''),
+    bodyEndScripts: '<script src="/js/manual.js?v=20261006-lightbox" defer></script><script type="module" src="/js/product360.js?v=20261007-a10s-calibrated"></script>' + (isS9 ? '<script type="module" src="/js/s9-3d.js?v=20261013-s9"></script>' : '')
   });
 
   return new Response(html, {

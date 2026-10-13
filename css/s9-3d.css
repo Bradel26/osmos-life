@@ -1,0 +1,40 @@
+/* S9 model styles are scoped so the other manual viewers keep their own UI. */
+.s9-interactive-section .s9-note { margin-top:1.15rem; max-width:860px; color:var(--ink-soft,#4a5568); font-size:.86rem; line-height:1.7; }
+.s9-viewer { width:100%; overflow:hidden; border:1px solid var(--silver-soft,#e6e9ec); border-radius:22px; background:var(--white,#fff); color:var(--ink,#0d1520); box-shadow:0 12px 36px rgba(15,33,56,.045); }
+.s9-viewer .s9-controls { display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between; gap:1rem; padding:1.1rem 1.25rem; border-bottom:1px solid #edf0f2; }
+.s9-viewer .s9-view-label { display:flex; align-items:center; flex-wrap:wrap; gap:.75rem; font-size:.8rem; font-weight:600; color:var(--ink-soft,#4a5568); }
+.s9-viewer .s9-view-select { min-height:42px; padding:.5rem 2rem .5rem .85rem; border:1px solid var(--silver,#c8ced4); border-radius:10px; background:#fff; color:var(--navy-800,#0f2138); font:inherit; font-size:.85rem; }
+.s9-viewer .s9-button-group { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; }
+.s9-viewer .s9-button { display:inline-flex; align-items:center; justify-content:center; gap:.35rem; min-height:42px; padding:.55rem .8rem; border:1px solid #dfe5ea; border-radius:10px; background:#fff; color:var(--navy-800,#0f2138); font:inherit; font-size:.8rem; font-weight:500; line-height:1.25; transition:background .15s ease,border-color .15s ease; }
+.s9-viewer .s9-button span { font-size:1.2rem; line-height:.85; }
+.s9-viewer .s9-button:hover:not(:disabled) { background:#f0f9fc; border-color:var(--blue-accent,#4fc3e8); }
+.s9-viewer .s9-button:focus-visible,.s9-viewer .s9-view-select:focus-visible,.s9-viewer canvas:focus-visible { outline:3px solid var(--blue-accent,#4fc3e8); outline-offset:3px; }
+.s9-viewer .s9-button:disabled,.s9-viewer .s9-view-select:disabled { cursor:wait; opacity:.45; }
+.s9-viewer .s9-palco { position:relative; width:100%; height:510px; background:radial-gradient(ellipse at 50% 55%,#fff 20%,#f8fafb 100%); }
+.s9-viewer .s9-palco canvas { position:absolute; inset:0; display:block; width:100%; height:100%; touch-action:none; cursor:grab; }
+.s9-viewer .s9-palco canvas:active { cursor:grabbing; }
+.s9-viewer .s9-palco canvas[hidden],.s9-viewer .s9-poster[hidden],.s9-viewer .s9-loading[hidden],.s9-viewer .s9-button[hidden] { display:none; }
+.s9-viewer .s9-poster { position:absolute; inset:8%; width:84%; height:84%; object-fit:contain; }
+.s9-viewer .s9-loading { position:absolute; z-index:1; inset:0; display:grid; place-items:center; padding:2rem; background:rgba(255,255,255,.82); color:var(--ink-soft,#4a5568); font-size:.9rem; line-height:1.7; text-align:center; }
+.s9-viewer .s9-caption { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.3rem 1rem; padding:.9rem 1.25rem; border-top:1px solid #edf0f2; color:var(--ink-soft,#4a5568); font-size:.75rem; }
+.s9-viewer .s9-caption span:first-child { color:var(--navy-700,#16304f); font-weight:600; letter-spacing:.05em; }
+.s9-viewer .s9-sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.s9-viewer .s9-fallback { padding:1rem 1.25rem; color:var(--ink-soft,#4a5568); font-size:.85rem; }
+.s9-viewer:fullscreen { display:flex; flex-direction:column; width:100%; height:100%; border:0; border-radius:0; background:#fff; }
+.s9-viewer:fullscreen .s9-controls,.s9-viewer:fullscreen .s9-caption { flex-shrink:0; }
+.s9-viewer:fullscreen .s9-palco { flex:1; height:auto; min-height:200px; }
+@media (max-width:700px) {
+  .s9-viewer .s9-controls { align-items:center; padding:1rem; }
+  .s9-viewer .s9-button-group { width:100%; }
+  .s9-viewer .s9-button { flex:1 0 auto; }
+  .s9-viewer .s9-caption { padding:.8rem 1rem; }
+}
+@media (max-width:480px) {
+  .s9-viewer { border-radius:16px; }
+  .s9-viewer .s9-palco { height:420px; }
+  .s9-viewer .s9-button { font-size:.76rem; padding:.55rem .6rem; }
+  .s9-viewer .s9-caption { justify-content:center; text-align:center; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .s9-viewer .s9-button { transition:none; }
+}
