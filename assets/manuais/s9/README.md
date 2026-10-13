@@ -49,7 +49,7 @@ ilustrações genéricas de apoio.
 
 > **Atenção (D1):** editar `manuais-data-s9.js` **não** atualiza a linha já
 > publicada no D1 — o seed usa `ON CONFLICT DO NOTHING`. Para refletir estes
-> desenhos em produção, aplicar o SQL `.manual-review/update-s9-desenhos.sql`
+> desenhos em produção, aplicar o SQL `_WORKSPACE/migracoes-sql/update-s9-desenhos.sql`
 > (mesmo padrão de `update-s9-card.sql`).
 
 Ver `ARQUITETURA-MANUAIS.md` na raiz do `osmos-site` para o procedimento completo.
