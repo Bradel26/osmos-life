@@ -5,16 +5,17 @@
 // do seu PRÓPRIO manual de instruções (INSTRUCTION MANUAL_S9 / MANUAL_S9_PTBR
 // v0.5 ajustada e harmonizada — cobertura das páginas 1–12 da fonte).
 //
-// ESTRUTURA ANTECIPADA — CAPA ADICIONADA, DEMAIS MÍDIAS PENDENTES:
+// ESTRUTURA — CAPA E DESENHOS OFICIAIS ADICIONADOS; FOTOS/360° PENDENTES:
 //   • Capa oficial do S9 já incluída: `imagem_url` → /assets/manuais/s9/card.jpg
 //     (usada no card do índice, no topo da página e como imagem OG).
-//   • Ainda SEM galeria de fotos, desenhos oficiais e 360°: `fotos: []`,
-//     `explorar360` ausente e os `desenhos` usam as ilustrações GENÉRICAS de
-//     `manuais-estrutura.js` (chave `svg`), claramente rotuladas como apoio.
-//     Onde falta mídia, a página cai nos fallbacks da estrutura — sem imagem
-//     quebrada.
-//   • Quando as fotos de estúdio próprias do S9 chegarem, preencher `fotos`,
-//     `desenhos.imagem_url` e (opcional) `explorar360` em `assets/manuais/s9/`.
+//   • Desenhos técnicos OFICIAIS do S9 já incluídos (line art do próprio manual):
+//     vista frontal, vista traseira, diagrama de instalação, acessórios inclusos
+//     e troca dos filtros — em /assets/manuais/s9/ (ver `desenhos` abaixo). Não
+//     usam mais as ilustrações genéricas de apoio.
+//   • Ainda SEM galeria de fotos de estúdio e SEM 360°: `fotos: []` e
+//     `explorar360` ausente — a seção interativa mostra o viewer genérico.
+//   • Quando as fotos de estúdio próprias do S9 chegarem, preencher `fotos` e
+//     (opcional) `explorar360` em `assets/manuais/s9/`.
 //
 // IMPORTANTE (regra de arquitetura — ver ARQUITETURA-MANUAIS.md):
 //   • Nada aqui é "regra geral" nem foi copiado do A9 PLUS ou do A10S. A fonte de
@@ -115,15 +116,17 @@ const S9_CONTEUDO = {
     { rotulo: 'Qualidade da água de saída', valor: 'Conformidade declarada com as Especificações para Equipamentos de Tratamento por Osmose Reversa (2001)' }
   ],
 
-  // Desenhos técnicos: o manual do S9 traz vista frontal, vista traseira e
-  // diagrama de instalação, mas AINDA NÃO temos os desenhos oficiais do S9.
-  // Usamos as ilustrações GENÉRICAS de apoio da estrutura (chave `svg` →
-  // manuais-estrutura.js), claramente rotuladas, com a descrição do que o
-  // desenho oficial do S9 mostrará. Sem `imagem_url`/`arquivo_url` (nada falso).
+  // Desenhos técnicos OFICIAIS do S9 (line art do próprio manual), em
+  // /assets/manuais/s9/. Cobrem a vista frontal (identificação de componentes),
+  // a vista traseira (conexões), o diagrama de instalação sob a pia, a lista de
+  // acessórios inclusos e o procedimento de troca dos cartuchos. `imagem_url`
+  // exibe o desenho e `arquivo_url` oferece o download do PNG original.
   desenhos: [
-    { titulo: 'Vista frontal (ilustração de apoio)', vista: 'frontal', svg: 'frontal', descricao: 'Ilustração genérica de apoio — desenho oficial do S9 a incluir. A vista frontal do S9 identifica: cartucho CBPA, cartucho de membrana RO, luzes de substituição (CBPA e RO), botão de energia, valor de TDS e luz de funcionamento.' },
-    { titulo: 'Vista traseira (ilustração de apoio)', vista: 'traseira', svg: 'traseira', descricao: 'Ilustração genérica de apoio — desenho oficial do S9 a incluir. A vista traseira do S9 traz: entrada de água da concessionária, saída de água pura, saída de água residual e o valor de TDS.' },
-    { titulo: 'Diagrama de instalação (ilustração de apoio)', vista: 'frontal', svg: 'hidraulico', descricao: 'Ilustração genérica de apoio — diagrama oficial do S9 a incluir. O diagrama do S9 mostra: torneira, tubo PE de água pura, tubo PE de entrada, conexão de três vias de entrada, registro angular de água fria, tubo PE de água residual e a tomada de alimentação elétrica.' }
+    { titulo: 'Vista frontal', vista: 'frontal', descricao: 'Identificação dos componentes do painel frontal: cartucho do filtro CBPA (1º estágio), cartucho da membrana RO (2º estágio), indicadores de substituição dos filtros CBPA e RO, indicador de funcionamento (ON), display de TDS e botão liga/desliga.', imagem_url: '/assets/manuais/s9/desenho-frontal.png', arquivo_url: '/assets/manuais/s9/desenho-frontal.png' },
+    { titulo: 'Vista traseira', vista: 'traseira', descricao: 'Conexões na parte traseira do equipamento: entrada de água (da rede), saída de água purificada (para a torneira) e saída de água de rejeito (para o dreno).', imagem_url: '/assets/manuais/s9/desenho-traseira.png', arquivo_url: '/assets/manuais/s9/desenho-traseira.png' },
+    { titulo: 'Diagrama de instalação', vista: '', descricao: 'Esquema de instalação sob a pia: torneira de água purificada, tê de entrada e registro de água fria (válvula angular) na alimentação, mangueiras PE de entrada, de água purificada e de rejeito, e as conexões de entrada/saída do purificador.', imagem_url: '/assets/manuais/s9/desenho-instalacao.png', arquivo_url: '/assets/manuais/s9/desenho-instalacao.png' },
+    { titulo: 'Acessórios inclusos', vista: '', descricao: 'Lista de acessórios que acompanham o produto: torneira de água purificada, fonte de alimentação, tê de entrada de água, mangueiras PE 3/8" e 1/4", abraçadeira de água de rejeito, conexões rápidas, parafusos de expansão e fita veda-rosca (PTFE).', imagem_url: '/assets/manuais/s9/desenho-acessorios.png', arquivo_url: '/assets/manuais/s9/desenho-acessorios.png' },
+    { titulo: 'Troca dos filtros', vista: 'lateral', descricao: 'Remoção e troca dos cartuchos (vista lateral): gire o filtro no sentido anti-horário e puxe-o para fora para substituí-lo. O procedimento é o mesmo para os cartuchos CBPA e RO.', imagem_url: '/assets/manuais/s9/desenho-troca-filtros.png', arquivo_url: '/assets/manuais/s9/desenho-troca-filtros.png' }
   ],
 
   // Dimensões intencionalmente NÃO desmembradas por eixo: o manual informa apenas

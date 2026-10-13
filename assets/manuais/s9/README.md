@@ -1,12 +1,12 @@
 # Assets do manual — Purificador OSMOS S9
 
-Pasta reservada para as imagens **próprias** do S9. **Ainda não temos mídia do
-S9**: a estrutura do manual já está publicada e usa os fallbacks genéricos da
-Central (arte SVG de apoio) até estas imagens chegarem. Nada aqui é reaproveitado
-de outro modelo.
+Pasta com as imagens **próprias** do S9. Já incluídos: a **capa** (`card.jpg`) e
+os **desenhos técnicos oficiais** (line art do próprio manual). **Pendentes:** a
+galeria de fotos de estúdio e o giro 360°, que seguem usando os fallbacks
+genéricos da Central até chegarem. Nada aqui é reaproveitado de outro modelo.
 
-Quando o material de estúdio/desenhos do S9 estiver disponível, suba os arquivos
-nesta pasta e preencha os campos correspondentes em
+Quando o material de estúdio (fotos/360°) do S9 estiver disponível, suba os
+arquivos nesta pasta e preencha os campos correspondentes em
 `functions/_lib/manuais-data-s9.js`.
 
 ## Imagem de card (índice `/manuais`)
@@ -33,18 +33,23 @@ atuais são do A9 PLUS e do A10S). Nomes esperados pelo detector de 4 fotos:
 | `foto-03-studio.png` | Traseira |
 | `foto-05-studio.png` | Lateral esquerda |
 
-## Desenhos técnicos (vindos do manual do S9)
+## Desenhos técnicos (oficiais do manual do S9) — INCLUÍDOS
 
-Hoje a seção usa ilustrações **genéricas** de apoio (chave `svg`), claramente
-rotuladas. Ao incluir os desenhos oficiais do S9, preencha `imagem_url` (e, se
-quiser, `arquivo_url` para download) nos itens de `conteudo.desenhos[]`:
+Os desenhos oficiais já estão nesta pasta e são referenciados em
+`conteudo.desenhos[]` (campos `imagem_url` e `arquivo_url`). Não se usam mais as
+ilustrações genéricas de apoio.
 
-- Vista frontal: cartucho CBPA, cartucho de membrana RO, luzes de substituição
-  (CBPA e RO), botão de energia, valor de TDS e luz de funcionamento.
-- Vista traseira: entrada de água da concessionária, saída de água pura, saída de
-  água residual e valor de TDS.
-- Diagrama de instalação: torneira, tubo PE de água pura, tubo PE de entrada,
-  conexão de três vias, registro angular de água fria, tubo PE de água residual e
-  tomada elétrica.
+| Arquivo | Aba / desenho |
+|---------|---------------|
+| `desenho-frontal.png` | Vista frontal — cartucho CBPA, cartucho da membrana RO, indicadores de troca (CBPA e RO), indicador de funcionamento (ON), display de TDS e botão liga/desliga |
+| `desenho-traseira.png` | Vista traseira — entrada de água (da rede), saída de água purificada e saída de água de rejeito |
+| `desenho-instalacao.png` | Diagrama de instalação sob a pia — torneira, tê e registro de água fria, mangueiras PE de entrada/pura/rejeito e conexões do purificador |
+| `desenho-acessorios.png` | Acessórios inclusos — torneira, fonte, tê de entrada, mangueiras PE 3/8" e 1/4", abraçadeira de rejeito, conexões, parafusos e fita veda-rosca |
+| `desenho-troca-filtros.png` | Troca dos filtros — girar no sentido anti-horário e puxar o cartucho para fora |
+
+> **Atenção (D1):** editar `manuais-data-s9.js` **não** atualiza a linha já
+> publicada no D1 — o seed usa `ON CONFLICT DO NOTHING`. Para refletir estes
+> desenhos em produção, aplicar o SQL `.manual-review/update-s9-desenhos.sql`
+> (mesmo padrão de `update-s9-card.sql`).
 
 Ver `ARQUITETURA-MANUAIS.md` na raiz do `osmos-site` para o procedimento completo.
