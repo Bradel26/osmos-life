@@ -6,7 +6,8 @@ nomeada pelo modelo:
 ```
 assets/manuais/
  ├── a9plus/     ← imagens do A9 PLUS (fotos de estúdio, desenhos técnicos, vistas)
- └── a10s/       ← criar quando o manual do A10S chegar (vazia até lá)
+ ├── a10s/       ← cinco vistas originais, detalhes e desenhos técnicos do A10S
+ └── s9/         ← reservada para o S9 (ainda sem mídia; estrutura usa fallbacks)
 ```
 
 **Nunca** reutilize a pasta de um modelo para outro. Cada produto só referencia
@@ -14,8 +15,7 @@ imagens da sua própria pasta no `conteudo_json`.
 
 ## Fotos para o giro 360° (opcional)
 
-O visualizador 360° só liga quando existem as **quatro fotos de estúdio
-ortogonais do próprio produto**, com estes nomes:
+O perfil **A9 PLUS** usa as quatro fotos de estúdio ortogonais do próprio produto:
 
 | Arquivo | Vista |
 |---------|-------|
@@ -27,9 +27,23 @@ ortogonais do próprio produto**, com estes nomes:
 Sem essas quatro fotos, a seção mostra apenas a galeria de fotos (sem 360°) — o
 que é o comportamento correto até o produto ter material próprio.
 
-> Observação: a geometria de reconstrução do 360° em `js/product360.js` foi
-> modelada para a carcaça do **A9 PLUS**. Um produto com formato diferente
-> precisa do seu próprio perfil de geometria/recortes antes de ativar o 360°.
+O perfil **A10S** usa exclusivamente as cinco vistas originais desta pasta:
+
+| Arquivo | Vista |
+|---------|-------|
+| `frente.png` | Frente |
+| `lateral-direita.png` | Lateral direita |
+| `tras.png` | Traseira |
+| `lateral-esquerda.png` | Lateral esquerda |
+| `superior.png` | Superior |
+
+`js/product360.js` contém geometrias e calibrações separadas para os dois modelos.
+O A10S permite giro completo e inclinação de 0° a 26° para observar o topo sem
+revelar a base não fotografada. Os PNGs são preservados; apenas os recortes de
+projeção são definidos no código. Nenhum detalhe é gerado por IA ou por fotos
+de outro equipamento.
+
+Integração e prévia local: `scripts/product360-integration.md`.
 
 Ver `ARQUITETURA-MANUAIS.md` na raiz do `osmos-site` para o procedimento completo
 de cadastro de um novo produto.

@@ -31,6 +31,8 @@ export { MANUAIS_SVGS };
 // linhas — nenhum dado é compartilhado entre modelos.
 import { A10S, seedA10S } from './manuais-data-a10s.js';
 export { A10S, seedA10S };
+import { S9, seedS9 } from './manuais-data-s9.js';
+export { S9, seedS9 };
 
 // ---------------------------------------------------------------------------
 // Conteúdo estruturado do manual A9 PLUS.
@@ -281,6 +283,7 @@ export async function seedManuais(db) {
   await seedA9Plus(db);
   // Demais produtos independentes (cada um com a sua própria linha/semente).
   await seedA10S(db);
+  await seedS9(db);
 }
 
 // Seed específico do A9 PLUS — só insere se o slug ainda não existir.
