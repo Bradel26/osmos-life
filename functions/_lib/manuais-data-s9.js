@@ -5,15 +5,16 @@
 // do seu PRÓPRIO manual de instruções (INSTRUCTION MANUAL_S9 / MANUAL_S9_PTBR
 // v0.5 ajustada e harmonizada — cobertura das páginas 1–12 da fonte).
 //
-// ESTRUTURA ANTECIPADA, SEM MÍDIA PRÓPRIA AINDA (pedido da área):
-//   • Nenhuma fotografia nem desenho oficial do S9 foi adicionado — ainda não os
-//     temos. `fotos: []`, `imagem_url: ''` e `explorar360` ausente. A página cai
-//     automaticamente nos fallbacks GENÉRICOS da estrutura (arte SVG de apoio,
-//     sem imagem quebrada). Os `desenhos` usam as ilustrações genéricas de
+// ESTRUTURA ANTECIPADA — CAPA ADICIONADA, DEMAIS MÍDIAS PENDENTES:
+//   • Capa oficial do S9 já incluída: `imagem_url` → /assets/manuais/s9/card.jpg
+//     (usada no card do índice, no topo da página e como imagem OG).
+//   • Ainda SEM galeria de fotos, desenhos oficiais e 360°: `fotos: []`,
+//     `explorar360` ausente e os `desenhos` usam as ilustrações GENÉRICAS de
 //     `manuais-estrutura.js` (chave `svg`), claramente rotuladas como apoio.
-//   • Quando as imagens de estúdio próprias do S9 chegarem, basta criar
-//     `assets/manuais/s9/`, preencher `fotos`/`imagem_url`/`desenhos.imagem_url`
-//     e (opcional) `explorar360` — a estrutura visual já está pronta.
+//     Onde falta mídia, a página cai nos fallbacks da estrutura — sem imagem
+//     quebrada.
+//   • Quando as fotos de estúdio próprias do S9 chegarem, preencher `fotos`,
+//     `desenhos.imagem_url` e (opcional) `explorar360` em `assets/manuais/s9/`.
 //
 // IMPORTANTE (regra de arquitetura — ver ARQUITETURA-MANUAIS.md):
 //   • Nada aqui é "regra geral" nem foi copiado do A9 PLUS ou do A10S. A fonte de
