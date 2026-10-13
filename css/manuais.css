@@ -444,8 +444,9 @@
 
 /* Visualizador 360°: imagem estática até WebGL/texturas estarem prontos. */
 .product360 { max-width: 980px; margin: 0 auto; background: #fff; border: 1px solid rgba(15,33,56,.1); border-radius: 24px; overflow: hidden; }
-.product360-stage { height: clamp(340px, 52vw, 560px); position: relative; background: #fff; }
-.product360-stage canvas, .product360-poster { width: 100%; height: 100%; display: block; }
+.product360-stage { height: clamp(340px, 52vw, 560px); position: relative; background: #fff; overflow: hidden; }
+.product360-ready .product360-stage::after { content: ''; position: absolute; width: var(--product360-shadow-width, 30%); height: 3%; left: 50%; transform: translateX(-50%); bottom: var(--product360-floor, 12%); background: radial-gradient(ellipse, rgba(15,33,56,.045), transparent 70%); pointer-events: none; }
+.product360-stage canvas, .product360-poster { width: 100%; height: 100%; display: block; position: relative; }
 .product360-stage canvas { cursor: grab; touch-action: none; }
 .product360-stage canvas.dragging { cursor: grabbing; }
 .product360-stage canvas[hidden], .product360-poster[hidden] { display: none !important; }

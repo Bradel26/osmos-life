@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>A10S · Visualização 360° | OSMOS</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/manuais.css?v=20261007-nav-contrast">
+  <style>
+    body { margin:0; background:#fff; }
+    main { max-width:1000px; margin:auto; padding:24px 16px; }
+    .viewer-heading { margin:0 0 20px; text-align:center; }
+    .viewer-heading p { margin:0 0 4px; font-size:12px; letter-spacing:.14em; color:#5a6576; }
+    .viewer-heading h1 { margin:0; font-size:clamp(24px,4vw,34px); color:#0f2138; }
+    @media(max-width:480px) { main { padding:16px 8px; } }
+  </style>
+</head>
+<body>
+  <main aria-labelledby="viewer-title">
+    <header class="viewer-heading"><p>OSMOS</p><h1 id="viewer-title">A10S em 360°</h1></header>
+    <div class="product360" data-product360 data-base="/assets/manuais/a10s/" data-model="a10s" data-produto="A10S">
+          <div class="product360-stage">
+            <img class="product360-poster" src="/assets/manuais/a10s/frente.png" alt="Vista frontal do Purificador OSMOS A10S" loading="lazy" decoding="async">
+            <canvas hidden tabindex="0" role="img" aria-label="Purificador OSMOS A10S em 360 graus. Arraste para girar, use as setas do teclado para rotação, as setas para cima e para baixo para inclinar e ver o topo, mais e menos para zoom e Home para voltar à frente."></canvas>
+            <span class="product360-badge" aria-hidden="true">360°</span>
+          </div>
+          <div class="product360-controls" role="group" aria-label="Controles de visualização">
+            <button type="button" data-360-action="left" aria-label="Girar 15 graus para a esquerda" disabled>↶</button>
+            <button type="button" data-360-action="right" aria-label="Girar 15 graus para a direita" disabled>↷</button><span class="product360-divider" aria-hidden="true"></span>
+            <button type="button" data-360-action="tilt-down" aria-label="Inclinar a visualização para baixo" disabled>⌄</button>
+            <button type="button" data-360-action="tilt-up" aria-label="Inclinar a visualização para cima e ver o topo" disabled>⌃</button>
+            <span class="product360-divider" aria-hidden="true"></span>
+            <button type="button" data-360-action="zoom-out" aria-label="Diminuir zoom" disabled>−</button>
+            <output data-360-zoom aria-label="Nível de zoom">100%</output>
+            <button type="button" data-360-action="zoom-in" aria-label="Aumentar zoom" disabled>+</button>
+            <button type="button" data-360-action="reset">Voltar à frente</button>
+            <button type="button" data-360-action="fullscreen" aria-label="Abrir visualizador em tela cheia">⛶</button>
+          </div>
+          <label class="product360-angle"><span>Rotação</span><input data-360-angle type="range" min="0" max="359" value="0" step="1" disabled aria-label="Ângulo de rotação" aria-valuetext="0 graus"><output data-360-degrees aria-label="Ângulo atual">0°</output></label>
+          <div class="product360-views" role="group" aria-label="Vistas do produto"><button type="button" data-360-view="0" aria-pressed="true">Frente</button><button type="button" data-360-view="90" aria-pressed="false">Lateral direita</button><button type="button" data-360-view="180" aria-pressed="false">Traseira</button><button type="button" data-360-view="270" aria-pressed="false">Lateral esquerda</button><button type="button" data-360-view="top" aria-pressed="false">Superior</button></div>
+          <p class="product360-status" data-360-status role="status">Carregando visualização interativa…</p>
+          <noscript><p class="product360-status">Ative o JavaScript para girar o produto. As fotografias estão disponíveis abaixo.</p></noscript>
+        </div>
+    <noscript><div class="manual-photo-grid"><figure><a href="/assets/manuais/a10s/frente.png"><img src="/assets/manuais/a10s/frente.png" alt="A10S — Frente" loading="lazy" style="width:100%;height:auto"></a><figcaption>Frente</figcaption></figure><figure><a href="/assets/manuais/a10s/lateral-direita.png"><img src="/assets/manuais/a10s/lateral-direita.png" alt="A10S — Lateral direita" loading="lazy" style="width:100%;height:auto"></a><figcaption>Lateral direita</figcaption></figure><figure><a href="/assets/manuais/a10s/tras.png"><img src="/assets/manuais/a10s/tras.png" alt="A10S — Traseira" loading="lazy" style="width:100%;height:auto"></a><figcaption>Traseira</figcaption></figure><figure><a href="/assets/manuais/a10s/lateral-esquerda.png"><img src="/assets/manuais/a10s/lateral-esquerda.png" alt="A10S — Lateral esquerda" loading="lazy" style="width:100%;height:auto"></a><figcaption>Lateral esquerda</figcaption></figure><figure><a href="/assets/manuais/a10s/superior.png"><img src="/assets/manuais/a10s/superior.png" alt="A10S — Superior" loading="lazy" style="width:100%;height:auto"></a><figcaption>Superior</figcaption></figure></div></noscript>
+  </main>
+  <script type="module" src="/js/product360.js?v=20261007-a10s-calibrated"></script>
+</body>
+</html>

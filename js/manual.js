@@ -250,10 +250,15 @@
       var rim = new THREE.DirectionalLight(0x4fc3e8, 0.8); rim.position.set(-5, 2, -3); scene.add(rim);
 
       // ---- Modelo procedural representativo do produto ----
+      // MATERIAL: plástico moldado FOSCO (não metal). metalness = 0 e rugosidade
+      // alta → reflexos suaves e difusos, sem brilho especular/espelhado. O tom
+      // frio das luzes é ambientação da marca, não acabamento metálico. Os
+      // indicadores (accent) usam emissive baixo = luz própria do display, não
+      // reflexo. Não aumentar metalness nem baixar roughness: viraria metálico.
       var product = new THREE.Group();
-      var bodyMat = new THREE.MeshStandardMaterial({ color: 0xeef3f6, metalness: 0.25, roughness: 0.45 });
-      var darkMat = new THREE.MeshStandardMaterial({ color: 0x16304f, metalness: 0.4, roughness: 0.4 });
-      var accentMat = new THREE.MeshStandardMaterial({ color: 0x4fc3e8, metalness: 0.3, roughness: 0.35, emissive: 0x11384a, emissiveIntensity: 0.4 });
+      var bodyMat = new THREE.MeshStandardMaterial({ color: 0xeef3f6, metalness: 0.0, roughness: 0.78 });
+      var darkMat = new THREE.MeshStandardMaterial({ color: 0x16304f, metalness: 0.0, roughness: 0.72 });
+      var accentMat = new THREE.MeshStandardMaterial({ color: 0x4fc3e8, metalness: 0.0, roughness: 0.55, emissive: 0x11384a, emissiveIntensity: 0.35 });
 
       var bodyGeo = THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.85, 1.5, 12, 32) : new THREE.CylinderGeometry(0.85, 0.85, 2.3, 32);
       var body = new THREE.Mesh(bodyGeo, bodyMat);

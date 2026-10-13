@@ -14,10 +14,11 @@
 //     na p.2 e 5–45 °C na tabela da p.3; manutenção geral 3–6 meses × troca de
 //     filtros 8–12/12–24 meses), ambos são apresentados de forma transparente,
 //     sem harmonização — conforme as notas de revisão do próprio manual.
-//   • O 360° interativo NÃO é ativado: a malha de reconstrução em product360.js
-//     é da carcaça do A9 PLUS. O A10S (corpo cilíndrico alto, dois cartuchos
-//     lado a lado) precisa do seu próprio perfil; até lá, mostra-se a galeria
-//     de fotografias de referência (comportamento correto).
+//   • O 360° interativo É ativado com o perfil PRÓPRIO do A10S (createMeshA10S
+//     em product360.js): corpo de seção stadium, dois cartuchos no topo e deck
+//     de controles. As cinco fotos (incl. a superior) são projetadas sobre a
+//     malha; a vista superior habilita a inclinação vertical. Nada é
+//     reaproveitado da carcaça do A9 PLUS. Ver campo `explorar360`.
 // =============================================================================
 
 const BASE = '/assets/manuais/a10s';
@@ -25,8 +26,7 @@ const BASE = '/assets/manuais/a10s';
 const A10S_CONTEUDO = {
   fotoComponentes: `${BASE}/frente.png`,
 
-  // Fotografias de referência (galeria). Como não são as 4 fotos de estúdio
-  // ortogonais nomeadas foto-01..05-studio, a seção exibe a galeria (sem 360°).
+  // Fotografias de referência (galeria completa do produto).
   fotos: [
     { url: `${BASE}/frente.png`, alt: 'Vista frontal do A10S: corpo cilíndrico, cúpula superior e faixa rosé' },
     { url: `${BASE}/lateral-direita.png`, alt: 'Vista lateral direita do purificador A10S' },
@@ -36,6 +36,22 @@ const A10S_CONTEUDO = {
     { url: `${BASE}/display.png`, alt: 'Painel de controle: Inlet/Outlet TDS, Select, Reset, Rinse, Filter Life, CBPA e ROCB' },
     { url: `${BASE}/conectores.png`, alt: 'Conexões: Water Inlet, Waste Water, Kitchen Water, Pure Water, DC e Smart Faucet' }
   ],
+
+  // Reconstrução 360° interativa (perfil PRÓPRIO do A10S em js/product360.js).
+  // As cinco fotografias de estúdio — frente, laterais, traseira e SUPERIOR —
+  // são projetadas sobre a malha. A vista superior habilita a inclinação
+  // vertical para revelar o deck de controles e as tampas dos cartuchos.
+  explorar360: {
+    model: 'a10s',
+    base: `${BASE}/`,
+    views: [
+      { file: 'frente.png', label: 'Frente', angle: 0 },
+      { file: 'lateral-direita.png', label: 'Lateral direita', angle: 90 },
+      { file: 'tras.png', label: 'Traseira', angle: 180 },
+      { file: 'lateral-esquerda.png', label: 'Lateral esquerda', angle: 270 }
+    ],
+    top: { file: 'superior.png', label: 'Superior' }
+  },
 
   visaoGeral: {
     texto: 'O OSMOS A10S é um purificador de água de ponto de uso por osmose reversa (modelos A10S-600 e A10S-800), de fluxo direto e sem tanque de pressão. Combina dois estágios de filtração — o filtro composto CBPA (PP+AC) e a membrana ROCB (osmose reversa com carvão pós-filtração), com precisão de 0,0001 µm — a uma etapa de esterilização ultravioleta (UV). O painel superior traz duplo monitoramento de TDS (entrada e saída) e os controles Select, Reset e Flush/Rinse, acompanhando a torneira eletrônica inteligente de água pura e água da cozinha.',
@@ -237,8 +253,8 @@ export const A10S = {
   categoria: 'Purificadores por Osmose Reversa',
   keywords: 'a10s a10s-600 a10s-800 osmose reversa purificador agua ro uv cbpa rocb tds filtro membrana ponto de uso fluxo direto 600g 800g torneira inteligente',
   descricao_curta: 'Purificador de ponto de uso por osmose reversa (A10S-600/800) com esterilização UV, filtros CBPA e ROCB (0,0001 µm) e duplo monitoramento de TDS.',
-  imagem_url: `${BASE}/frente.png`,
-  imagem_alt: 'Purificador de água OSMOS A10S com filtros CBPA e ROCB',
+  imagem_url: `${BASE}/card.jpg`,
+  imagem_alt: 'Purificador de água OSMOS A10S em vista diagonal com torneira eletrônica',
   conteudo: A10S_CONTEUDO
 };
 

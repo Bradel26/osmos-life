@@ -40,11 +40,13 @@ function sectionHead(eyebrow, title, lead) {
 // produto não tiver essas fotos próprias, a central mostra apenas a galeria de
 // fotos (sem 360°) — nunca reaproveita as fotos de outro modelo.
 const STUDIO_360_FILES = ['foto-01-studio.png', 'foto-02-studio.png', 'foto-03-studio.png', 'foto-05-studio.png'];
+const STUDIO_360_LABELS = ['Frente', 'Lateral direita', 'Traseira', 'Lateral esquerda'];
 
-function studio360Base(c) {
-  if (c.explorar360 && c.explorar360.base) return c.explorar360.base;
+// Base das 4 fotos de estúdio ortogonais (frente, laterais, traseira), derivada
+// das próprias fotos do produto — nada é fixado a um modelo específico.
+function studioFilesBase(c) {
   const fotos = c.fotos || [];
-  if (fotos.length !== 4) return null;
+  if (fotos.length < 4) return null;
   let base = null;
   for (const name of STUDIO_360_FILES) {
     const foto = fotos.find((f) => (f.url || '').endsWith('/' + name));
@@ -55,7 +57,41 @@ function studio360Base(c) {
   return base;
 }
 
-function canExplore360(c) { return studio360Base(c) !== null; }
+// Configuração do viewer 360°, vinda de duas fontes possíveis:
+//  1) c.explorar360 explícito (ex.: A10S — malha própria, 5 vistas com superior);
+//  2) detecção das 4 fotos de estúdio ortogonais (perfil a9plus).
+// Retorna { base, model, views:[{file,label,angle}], top|null } ou null.
+function viewer360Config(c) {
+  const e = c.explorar360;
+  if (e && e.base && Array.isArray(e.views) && e.views.length) {
+    return {
+      base: e.base,
+      model: e.model || 'a9plus',
+      views: e.views.map((v, i) => ({ file: v.file, label: v.label, angle: v.angle ?? i * 90 })),
+      top: e.top ? { file: e.top.file, label: e.top.label || 'Superior' } : null
+    };
+  }
+  // Existing A10S database rows may predate explorar360. Enable this calibrated
+  // profile only when ALL five original A10S files are present in its own folder.
+  const a10sFiles = ['frente.png','lateral-direita.png','tras.png','lateral-esquerda.png','superior.png'];
+  const a10sPhotos = a10sFiles.map(file => (c.fotos || []).find(f => (f.url || '').endsWith('/a10s/' + file)));
+  if (a10sPhotos.every(Boolean)) {
+    const base = a10sPhotos[0].url.slice(0,-a10sFiles[0].length);
+    if (a10sPhotos.every((f,i) => f.url === base + a10sFiles[i])) return {
+      base, model: 'a10s',
+      views: a10sFiles.slice(0,4).map((file,i) => ({file,label:STUDIO_360_LABELS[i],angle:i*90})),
+      top: {file:'superior.png',label:'Superior'}
+    };
+  }
+  const base = studioFilesBase(c);
+  if (base === null) return null;
+  return {
+    base, model: 'a9plus', top: null,
+    views: STUDIO_360_FILES.map((file, i) => ({ file, label: STUDIO_360_LABELS[i], angle: i * 90 }))
+  };
+}
+
+function canExplore360(c) { return viewer360Config(c) !== null; }
 
 /* ---------- Seções ---------- */
 function renderVisaoGeral(c) {
@@ -79,22 +115,34 @@ function renderVisaoGeral(c) {
 function render3D(c, prod) {
   prod = prod || {};
   if (c.fotos && c.fotos.length) {
-    const base360 = studio360Base(c);
-    const can360 = base360 !== null;
+    const cfg = viewer360Config(c);
+    const can360 = cfg !== null;
     const label = prod.modelo || prod.nome || 'produto';
     const nome = prod.nome || label;
+    const posterUrl = can360 ? cfg.base + cfg.views[0].file : c.fotos[0].url;
+    const hasTop = can360 && !!cfg.top;
+    const viewButtons = can360 ? cfg.views.map((v) => `<button type="button" data-360-view="${v.angle}" aria-pressed="${v.angle === 0 ? 'true' : 'false'}">${esc(v.label)}</button>`).join('')
+      + (hasTop ? `<button type="button" data-360-view="top" aria-pressed="false">${esc(cfg.top.label)}</button>` : '') : '';
+    const tiltControls = hasTop ? `<span class="product360-divider" aria-hidden="true"></span>
+            <button type="button" data-360-action="tilt-down" aria-label="Inclinar a visualização para baixo" disabled>⌄</button>
+            <button type="button" data-360-action="tilt-up" aria-label="Inclinar a visualização para cima e ver o topo" disabled>⌃</button>` : '';
+    const nViews = can360 ? cfg.views.length + (hasTop ? 1 : 0) : 0;
+    const nWord = { 4: 'quatro', 5: 'cinco' }[nViews] || String(nViews);
+    const note = hasTop
+      ? `Reconstrução visual aproximada a partir de ${nWord} fotografias, incluindo a vista superior. Arraste na horizontal para girar e na vertical para inclinar e ver o topo. Para conferir conexões, rótulos e detalhes técnicos, consulte as fotos e os desenhos abaixo.`
+      : `Reconstrução visual aproximada a partir de ${nWord} fotografias. Para conferir conexões, rótulos e detalhes técnicos, consulte as fotos e os desenhos abaixo.`;
     return `<section id="explorar-3d" class="manual-section section-tint">
       <div class="container">
-        ${sectionHead('Produto interativo', can360 ? `Explore o ${label} em 360°` : 'Fotos do produto', can360 ? 'Arraste para os lados e conheça o produto de todos os ângulos.' : 'Selecione uma foto para ampliar.')}
-        ${can360 ? `<div class="product360" data-product360 data-base="${esc(base360)}" data-produto="${esc(label)}">
+        ${sectionHead('Produto interativo', can360 ? `Explore o ${label} em 360°` : 'Fotos do produto', can360 ? (hasTop ? 'Gire o produto e incline levemente para observar a parte superior.' : 'Arraste para os lados e conheça o produto de todos os ângulos.') : 'Selecione uma foto para ampliar.')}
+        ${can360 ? `<div class="product360" data-product360 data-base="${esc(cfg.base)}" data-model="${esc(cfg.model)}" data-produto="${esc(label)}">
           <div class="product360-stage">
-            <img class="product360-poster" src="${esc(c.fotos[0].url)}" alt="Vista frontal do ${esc(nome)}" loading="lazy" decoding="async">
-            <canvas hidden tabindex="0" role="img" aria-label="${esc(nome)} em 360 graus. Arraste para girar, use as setas do teclado para rotação, mais e menos para zoom e Home para voltar à frente."></canvas>
+            <img class="product360-poster" src="${esc(posterUrl)}" alt="Vista frontal do ${esc(nome)}" loading="lazy" decoding="async">
+            <canvas hidden tabindex="0" role="img" aria-label="${esc(nome)} em 360 graus. Arraste para girar, use as setas do teclado para rotação${hasTop ? ', as setas para cima e para baixo para inclinar e ver o topo' : ''}, mais e menos para zoom e Home para voltar à frente."></canvas>
             <span class="product360-badge" aria-hidden="true">360°</span>
           </div>
           <div class="product360-controls" role="group" aria-label="Controles de visualização">
             <button type="button" data-360-action="left" aria-label="Girar 15 graus para a esquerda" disabled>↶</button>
-            <button type="button" data-360-action="right" aria-label="Girar 15 graus para a direita" disabled>↷</button>
+            <button type="button" data-360-action="right" aria-label="Girar 15 graus para a direita" disabled>↷</button>${tiltControls}
             <span class="product360-divider" aria-hidden="true"></span>
             <button type="button" data-360-action="zoom-out" aria-label="Diminuir zoom" disabled>−</button>
             <output data-360-zoom aria-label="Nível de zoom">100%</output>
@@ -102,17 +150,12 @@ function render3D(c, prod) {
             <button type="button" data-360-action="reset">Voltar à frente</button>
             <button type="button" data-360-action="fullscreen" aria-label="Abrir visualizador em tela cheia">⛶</button>
           </div>
-          <label class="product360-angle"><span>Rotação</span><input data-360-angle type="range" min="0" max="359" value="0" step="1" disabled aria-label="Ângulo de rotação" aria-valuetext="0 graus"><span>360°</span></label>
-          <div class="product360-views" role="group" aria-label="Vistas do produto">
-            <button type="button" data-360-view="0" aria-pressed="true">Frente</button>
-            <button type="button" data-360-view="90" aria-pressed="false">Lateral direita</button>
-            <button type="button" data-360-view="180" aria-pressed="false">Traseira</button>
-            <button type="button" data-360-view="270" aria-pressed="false">Lateral esquerda</button>
-          </div>
+          <label class="product360-angle"><span>Rotação</span><input data-360-angle type="range" min="0" max="359" value="0" step="1" disabled aria-label="Ângulo de rotação" aria-valuetext="0 graus"><output data-360-degrees aria-label="Ângulo atual">0°</output></label>
+          <div class="product360-views" role="group" aria-label="Vistas do produto">${viewButtons}</div>
           <p class="product360-status" data-360-status role="status">Carregando visualização interativa…</p>
           <noscript><p class="product360-status">Ative o JavaScript para girar o produto. As fotografias estão disponíveis abaixo.</p></noscript>
         </div>
-        <p class="product360-note">Reconstrução visual aproximada a partir de quatro fotografias. Para conferir conexões, rótulos e detalhes técnicos, consulte as fotos e os desenhos abaixo.</p>` : ''}
+        <p class="product360-note">${note}</p>` : ''}
         <h3 class="product360-photo-heading">Fotografias de referência</h3>
         <div class="manual-photo-grid">${c.fotos.map((f) => `<figure class="draw-panel active"><button type="button" class="manual-photo-button draw-canvas" data-zoomable aria-label="Ampliar ${esc(f.alt)}"><img src="${esc(f.url)}" alt="${esc(f.alt)}" loading="lazy" decoding="async"></button><figcaption>${esc(f.alt)}</figcaption></figure>`).join('')}</div>
       </div>
@@ -503,7 +546,7 @@ export async function onRequestGet({ env, params }) {
     bodyClass: 'manual-detail-page',
     bodyHtml,
     extraHead: '\n<style>:root{scroll-padding-top:150px}.draw-lightbox[hidden]{display:none!important}</style>',
-    bodyEndScripts: '<script src="/js/manual.js?v=20261006-lightbox" defer></script><script type="module" src="/js/product360.js?v=20261002-1"></script>'
+    bodyEndScripts: '<script src="/js/manual.js?v=20261006-lightbox" defer></script><script type="module" src="/js/product360.js?v=20261007-a10s-calibrated"></script>'
   });
 
   return new Response(html, {
