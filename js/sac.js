@@ -97,6 +97,14 @@
     highlightCard(categoriaSelect.value);
   });
 
+  /* ===== Orientação de segurança quando o cliente declara risco ===== */
+  var riscoAviso = document.getElementById('sacRiscoAviso');
+  document.querySelectorAll('input[name="risco"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      riscoAviso.hidden = !(radio.checked && radio.value === 'sim');
+    });
+  });
+
   /* ===== Nome do arquivo anexado ===== */
   var anexoInput = document.getElementById('sacAnexo');
   var anexoName = document.getElementById('sacAnexoName');

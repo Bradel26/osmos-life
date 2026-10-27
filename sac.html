@@ -188,6 +188,23 @@
           </div>
 
           <div class="field sac-field-conditional" data-conditional>
+            <label for="sacModelo">Modelo do produto <span class="optional">(opcional)</span></label>
+            <select id="sacModelo" name="modelo">
+              <option value="">Selecione o modelo</option>
+              <option value="A9 Plus">OSMOS A9 Plus</option>
+              <option value="A10S">OSMOS A10S</option>
+              <option value="S9">OSMOS S9</option>
+              <option value="">Outro / não sei</option>
+            </select>
+          </div>
+
+          <div class="field sac-field-conditional" data-conditional>
+            <label for="sacSerie">Número de série <span class="optional">(opcional)</span></label>
+            <input type="text" id="sacSerie" name="serie" autocomplete="off" maxlength="80">
+            <span class="hint">Fica na etiqueta do aparelho.</span>
+          </div>
+
+          <div class="field sac-field-conditional" data-conditional>
             <label for="sacPedido">Número do pedido ou Nota Fiscal <span class="optional">(opcional)</span></label>
             <input type="text" id="sacPedido" name="pedido" autocomplete="off">
             <span class="hint">Se tiver em mãos, informe para agilizarmos o atendimento.</span>
@@ -208,6 +225,11 @@
             <div class="sac-radio" role="radiogroup">
               <label><input type="radio" name="risco" value="nao" required checked> Não</label>
               <label><input type="radio" name="risco" value="sim"> Sim</label>
+            </div>
+            <div class="sac-risk-note" id="sacRiscoAviso" role="note" hidden>
+              <strong>Por segurança, enquanto aguarda nosso contato:</strong> desligue o aparelho da tomada, feche o registro de água
+              e não use a água do purificador. Se houver água perto da parte elétrica, não toque no aparelho.
+              Sua solicitação será tratada com prioridade.
             </div>
           </div>
 

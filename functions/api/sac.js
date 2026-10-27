@@ -70,6 +70,8 @@ export async function onRequestPost({ request, env }) {
     telefone: texto(form, 'telefone') || undefined,
     documento: texto(form, 'documento') || undefined,
     pedido: texto(form, 'pedido') || undefined,
+    modelo: texto(form, 'modelo') || undefined,
+    serie: texto(form, 'serie') || undefined,
     assunto: texto(form, 'assunto') || undefined,
     categoria: texto(form, 'categoria'),
     descricao: texto(form, 'descricao'),

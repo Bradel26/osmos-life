@@ -139,6 +139,19 @@
 .sac-form-actions { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.4rem; }
 .sac-form-note { font-size: 0.8rem; color: var(--ink-soft); }
 
+/* Orientação exibida quando o cliente declara risco */
+.sac-risk-note {
+  margin-top: 0.6rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid #f2b8b5;
+  background: #fdf1f0;
+  color: #7a1f1a;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.sac-risk-note[hidden] { display: none; }
+
 /* Pergunta de risco (sim/não) e consentimento LGPD */
 .sac-question { font-size: 0.85rem; font-weight: 600; color: var(--ink); }
 .sac-radio { display: flex; gap: 1.5rem; }
