@@ -14,8 +14,20 @@
  *                        limita 5 envios/10 min por IP).
  */
 
-const TAMANHO_MAXIMO_ANEXO = 15 * 1024 * 1024;
-const MAXIMO_ANEXOS = 5;
+const MAXIMO_ANEXOS_PADRAO = 5;
+const TAMANHO_MAXIMO_MB_PADRAO = 15;
+
+function limite(env, nome, padrao, maximo) {
+  const valor = Number(env[nome]);
+  return Number.isInteger(valor) && valor > 0 && valor <= maximo ? valor : padrao;
+}
+
+function limitesAnexos(env) {
+  return {
+    quantidade: limite(env, 'SAC_MAXIMO_ANEXOS', MAXIMO_ANEXOS_PADRAO, 20),
+    tamanhoMb: limite(env, 'SAC_ANEXO_MAX_MB', TAMANHO_MAXIMO_MB_PADRAO, 100),
+  };
+}
 
 function resposta(status, corpo) {
   return new Response(JSON.stringify(corpo), {
@@ -53,6 +65,8 @@ export async function onRequestPost({ request, env }) {
   }
 
   const ip = request.headers.get('CF-Connecting-IP') || '';
+  const configAnexos = limitesAnexos(env);
+  const tamanhoMaximoAnexo = configAnexos.tamanhoMb * 1024 * 1024;
 
   let form;
   try {
@@ -108,11 +122,12 @@ export async function onRequestPost({ request, env }) {
 
   // Anexos: falha aqui nao derruba o protocolo ja aberto. O Nexus registra na ficha
   // o arquivo que nao foi salvo e o cliente e avisado para envia-lo de novo.
-  const anexos = form.getAll('anexo').filter((a) => a && typeof a !== 'string' && a.size > 0).slice(0, MAXIMO_ANEXOS);
-  const naoSalvos = [];
+  const anexosRecebidos = form.getAll('anexo').filter((a) => a && typeof a !== 'string' && a.size > 0);
+  const anexos = anexosRecebidos.slice(0, configAnexos.quantidade);
+  const naoSalvos = anexosRecebidos.slice(configAnexos.quantidade).map((anexo) => anexo.name);
   for (const anexo of anexos) {
     let salvo = false;
-    if (anexo.size <= TAMANHO_MAXIMO_ANEXO) {
+    if (anexo.size <= tamanhoMaximoAnexo) {
       try {
         const corpo = new FormData();
         corpo.append('file', anexo, anexo.name);
@@ -136,4 +151,8 @@ export async function onRequestPost({ request, env }) {
     anexoRecebido: anexos.length ? naoSalvos.length === 0 : null,
     anexosNaoSalvos: naoSalvos,
   });
+}
+
+export async function onRequestGet({ env }) {
+  return resposta(200, { ok: true, limitesAnexos: limitesAnexos(env) });
 }
