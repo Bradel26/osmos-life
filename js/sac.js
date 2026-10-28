@@ -130,6 +130,16 @@
   var anexoAviso = document.getElementById('sacAnexoAviso');
   var TAMANHO_MAXIMO_ANEXO = 15 * 1024 * 1024;
   var MAXIMO_ANEXOS = 5;
+  var anexoLimitesLabel = document.getElementById('sacAnexoLimits');
+  fetch('/api/sac')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      if (!data || !data.limitesAnexos) return;
+      MAXIMO_ANEXOS = data.limitesAnexos.quantidade;
+      TAMANHO_MAXIMO_ANEXO = data.limitesAnexos.tamanhoMb * 1024 * 1024;
+      if (anexoLimitesLabel) anexoLimitesLabel.textContent = '(opcional, até ' + MAXIMO_ANEXOS + ' arquivos de ' + data.limitesAnexos.tamanhoMb + ' MB cada)';
+    })
+    .catch(function () {});
 
   /* Turnstile (anti-robô): só carrega quando #sacTurnstile tem data-sitekey. */
   var turnstileBox = document.getElementById('sacTurnstile');
