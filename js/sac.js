@@ -97,13 +97,22 @@
     highlightCard(categoriaSelect.value);
   });
 
+  /* ===== Orientação de segurança quando o cliente declara risco ===== */
+  var riscoAviso = document.getElementById('sacRiscoAviso');
+  document.querySelectorAll('input[name="risco"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      riscoAviso.hidden = !(radio.checked && radio.value === 'sim');
+    });
+  });
+
   /* ===== Nome do arquivo anexado ===== */
   var anexoInput = document.getElementById('sacAnexo');
   var anexoName = document.getElementById('sacAnexoName');
   anexoInput.addEventListener('change', function () {
-    anexoName.textContent = anexoInput.files && anexoInput.files.length
-      ? 'Arquivo selecionado: ' + anexoInput.files[0].name
-      : '';
+    var n = anexoInput.files ? anexoInput.files.length : 0;
+    anexoName.textContent = n === 0 ? ''
+      : n === 1 ? 'Arquivo selecionado: ' + anexoInput.files[0].name
+      : n + ' arquivos selecionados: ' + Array.prototype.map.call(anexoInput.files, function (f) { return f.name; }).join(', ');
   });
 
   /* ===== Envio da solicitação =====
@@ -118,7 +127,9 @@
   var protocolNumber = document.getElementById('sacProtocolNumber');
   var protocolPending = document.getElementById('sacProtocolPending');
   var trackingLink = document.getElementById('sacTrackingLink');
+  var anexoAviso = document.getElementById('sacAnexoAviso');
   var TAMANHO_MAXIMO_ANEXO = 15 * 1024 * 1024;
+  var MAXIMO_ANEXOS = 5;
 
   /* Turnstile (anti-robô): só carrega quando #sacTurnstile tem data-sitekey. */
   var turnstileBox = document.getElementById('sacTurnstile');
@@ -145,8 +156,14 @@
       return;
     }
 
-    if (anexoInput.files && anexoInput.files[0] && anexoInput.files[0].size > TAMANHO_MAXIMO_ANEXO) {
-      window.alert('O anexo deve ter no máximo 15 MB.');
+    var arquivos = anexoInput.files ? Array.prototype.slice.call(anexoInput.files) : [];
+    if (arquivos.length > MAXIMO_ANEXOS) {
+      window.alert('Envie no máximo ' + MAXIMO_ANEXOS + ' arquivos.');
+      return;
+    }
+    var grandes = arquivos.filter(function (f) { return f.size > TAMANHO_MAXIMO_ANEXO; });
+    if (grandes.length) {
+      window.alert('Cada arquivo deve ter no máximo 15 MB. Remova: ' + grandes.map(function (f) { return f.name; }).join(', '));
       return;
     }
 
@@ -177,6 +194,14 @@
           // backend não retornou protocolo — não inventamos um número
           protocolBlock.hidden = true;
           protocolPending.hidden = false;
+        }
+
+        // Arquivo que nao foi salvo: o cliente precisa saber para enviar de novo.
+        if (anexoAviso && data.anexosNaoSalvos && data.anexosNaoSalvos.length) {
+          anexoAviso.textContent = 'Não conseguimos salvar ' +
+            (data.anexosNaoSalvos.length === 1 ? 'o arquivo ' : 'os arquivos ') + data.anexosNaoSalvos.join(', ') +
+            '. Sua solicitação foi registrada; nossa equipe vai pedir o arquivo novamente pelo e-mail informado.';
+          anexoAviso.hidden = false;
         }
 
         if (trackingLink && data.acompanhamento) {
