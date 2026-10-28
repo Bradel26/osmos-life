@@ -1,7 +1,7 @@
 /**
  * POST /api/sac — Cloudflare Pages Function do site osmoslife.com.br.
  *
- * Recebe o formulario do SAC (multipart, com anexo opcional), confere o
+ * Recebe o formulario do SAC (multipart, com ate 5 anexos opcionais), confere o
  * Turnstile e repassa ao modulo SAC do Nexus com a chave secreta, que nunca
  * chega ao navegador. Resposta ao site: { ok: true, protocolo, acompanhamento }.
  *
@@ -15,6 +15,7 @@
  */
 
 const TAMANHO_MAXIMO_ANEXO = 15 * 1024 * 1024;
+const MAXIMO_ANEXOS = 5;
 
 function resposta(status, corpo) {
   return new Response(JSON.stringify(corpo), {
@@ -105,11 +106,12 @@ export async function onRequestPost({ request, env }) {
     return resposta(503, { ok: false, erro: 'Não foi possível registrar sua solicitação agora.', ref: 'nexus-indisponivel' });
   }
 
-  // Anexo: falha aqui nao derruba o protocolo ja aberto; a equipe pede o arquivo na triagem.
-  let anexoRecebido = null;
-  const anexo = form.get('anexo');
-  if (anexo && typeof anexo !== 'string' && anexo.size > 0) {
-    anexoRecebido = false;
+  // Anexos: falha aqui nao derruba o protocolo ja aberto. O Nexus registra na ficha
+  // o arquivo que nao foi salvo e o cliente e avisado para envia-lo de novo.
+  const anexos = form.getAll('anexo').filter((a) => a && typeof a !== 'string' && a.size > 0).slice(0, MAXIMO_ANEXOS);
+  const naoSalvos = [];
+  for (const anexo of anexos) {
+    let salvo = false;
     if (anexo.size <= TAMANHO_MAXIMO_ANEXO) {
       try {
         const corpo = new FormData();
@@ -119,17 +121,19 @@ export async function onRequestPost({ request, env }) {
           headers: cabecalhos,
           body: corpo,
         });
-        anexoRecebido = r.ok;
+        salvo = r.ok;
       } catch {
-        anexoRecebido = false;
+        salvo = false;
       }
     }
+    if (!salvo) naoSalvos.push(anexo.name);
   }
 
   return resposta(200, {
     ok: true,
     protocolo: caso.protocolo,
     acompanhamento: caso.trackingToken ? `${variavel(env, 'SAC_ACOMPANHAR_URL')}/${caso.trackingToken}` : null,
-    anexoRecebido,
+    anexoRecebido: anexos.length ? naoSalvos.length === 0 : null,
+    anexosNaoSalvos: naoSalvos,
   });
 }

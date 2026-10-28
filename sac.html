@@ -236,9 +236,9 @@
           <div class="sac-file">
             <label class="sac-file-label" for="sacAnexo">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12l-8.5 8.5a5 5 0 01-7-7L14 5a3.5 3.5 0 015 5l-8.5 8.5a2 2 0 01-3-3L15 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Anexar arquivo, foto ou documento <span class="optional">(opcional)</span>
+              Anexar fotos ou documentos <span class="optional">(opcional, até 5 arquivos de 15 MB)</span>
             </label>
-            <input type="file" id="sacAnexo" name="anexo" accept="image/*,.pdf,.doc,.docx">
+            <input type="file" id="sacAnexo" name="anexo" accept="image/*,.pdf,.doc,.docx" multiple>
             <span class="sac-file-name" id="sacAnexoName" aria-live="polite"></span>
           </div>
 
@@ -270,6 +270,8 @@
             <span class="sac-protocol-label">Número de protocolo</span>
             <span class="sac-protocol-number" id="sacProtocolNumber"></span>
           </div>
+
+          <p class="sac-anexo-aviso" id="sacAnexoAviso" hidden></p>
 
           <p class="sac-protocol-pending" id="sacProtocolPending" hidden>
             Não recebemos o número de protocolo. Nossa equipe entrará em contato pelo e-mail informado.
